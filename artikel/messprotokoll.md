@@ -170,7 +170,7 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 - [ ] Vorlauffühler reparieren
 - [ ] FI-Prüftaste testen, Erstprüfung durch Elektrofachkraft
 - [ ] Temperatur SSR-Kühlkörper unter Volllast prüfen
-- [ ] Fragen an den Heizungsbauer (Martin): Durchfluss/Pumpenstufe, Ölkessel
+- [ ] Fragen an den Heizungsbauer: Durchfluss/Pumpenstufe, Ölkessel
       absperren, Thermostat-Einstellung, Entlüften/Anlagendruck
 - [ ] Bisherigen Ölverbrauch pro Jahr erfragen (echter Wärmebedarf)
 - [ ] Tatsächliche Heizlast im Normalbetrieb messen (kWh pro Tag) und mit der

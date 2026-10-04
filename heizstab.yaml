@@ -1,0 +1,302 @@
+esphome:
+  name: esphome-web-69f790
+  friendly_name: ESP Heizstab
+  min_version: 2026.4.0
+  name_add_mac_suffix: false
+  project:
+    name: "heizstab.controller"
+    version: "1.0.0"          # ← neu, oben im esphome:-Block
+
+esp32:
+  board: esp32dev
+  variant: esp32
+  cpu_frequency: 240MHz
+  framework:
+    type: arduino
+
+logger:
+api:
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap: {}
+
+captive_portal:
+
+globals:
+  - id: ble_count
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: last_ble_name
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+  - id: ble_seen
+    type: std::set<std::string>
+    restore_value: no
+  - id: heizstab_level
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: cal_x
+    type: int
+    restore_value: no
+    initial_value: '-1'
+  - id: cal_y
+    type: int
+    restore_value: no
+    initial_value: '-1'
+
+interval:
+  - interval: 30s
+    then:
+      - lambda: |-
+          id(ble_count) = 0;
+          id(ble_seen).clear();
+
+spi:
+  - id: lcd
+    clk_pin: GPIO14
+    mosi_pin: GPIO13
+    miso_pin:
+      number: GPIO12
+      ignore_strapping_warning: true
+  - id: touch
+    clk_pin: GPIO25
+    mosi_pin: GPIO32
+    miso_pin: GPIO39
+
+output:
+  - platform: ledc
+    pin: GPIO21
+    id: backlight_pwm
+  - platform: slow_pwm
+    pin: GPIO27
+    period: 60s
+    id: heizstab_pwm
+
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: back_light
+    restore_mode: ALWAYS_ON
+
+number:
+  - platform: template
+    name: "Heizstab Leistung"
+    id: heizstab_pct
+    min_value: 0
+    max_value: 100
+    step: 25
+    unit_of_measurement: "%"
+    lambda: |-
+      return id(heizstab_level) * 25.0f;
+    set_action:
+      - lambda: |-
+          int lv = (int)(x / 25.0f + 0.5f);
+          if (lv < 0) lv = 0;
+          if (lv > 4) lv = 4;
+          id(heizstab_level) = lv;
+          float lvl[] = {0.0f, 0.25f, 0.5f, 0.75f, 1.0f};
+          id(heizstab_pwm).set_level(lvl[lv]);
+
+# x = vertikale Achse (Buttonzeile), y = horizontale Achse (welcher Button)
+binary_sensor:
+  - platform: touchscreen
+    touchscreen_id: my_touch
+    name: "Heizstab 0%"
+    x_min: 265
+    x_max: 320
+    y_min: 10
+    y_max: 65
+    on_press:
+      - lambda: |-
+          id(heizstab_level) = 0;
+          id(heizstab_pwm).set_level(0.0f);
+  - platform: touchscreen
+    touchscreen_id: my_touch
+    name: "Heizstab 25%"
+    x_min: 265
+    x_max: 320
+    y_min: 55
+    y_max: 107
+    on_press:
+      - lambda: |-
+          id(heizstab_level) = 1;
+          id(heizstab_pwm).set_level(0.25f);
+  - platform: touchscreen
+    touchscreen_id: my_touch
+    name: "Heizstab 50%"
+    x_min: 265
+    x_max: 320
+    y_min: 97
+    y_max: 150
+    on_press:
+      - lambda: |-
+          id(heizstab_level) = 2;
+          id(heizstab_pwm).set_level(0.5f);
+  - platform: touchscreen
+    touchscreen_id: my_touch
+    name: "Heizstab 75%"
+    x_min: 265
+    x_max: 320
+    y_min: 140
+    y_max: 192
+    on_press:
+      - lambda: |-
+          id(heizstab_level) = 3;
+          id(heizstab_pwm).set_level(0.75f);
+  - platform: touchscreen
+    touchscreen_id: my_touch
+    name: "Heizstab 100%"
+    x_min: 265
+    x_max: 320
+    y_min: 182
+    y_max: 240
+    on_press:
+      - lambda: |-
+          id(heizstab_level) = 4;
+          id(heizstab_pwm).set_level(1.0f);
+
+sensor:
+  - platform: wifi_signal
+    id: wifi_signal_db
+    name: "WiFi Signal"
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: wifi_ip
+
+font:
+  - file: "gfonts://Open+Sans"
+    id: os_small
+    size: 13
+  - file: "gfonts://Open+Sans"
+    id: os_med
+    size: 18
+  - file: "gfonts://Open+Sans@700"
+    id: os_bold
+    size: 20
+  - file: "gfonts://Oswald"
+    id: oswald_big
+    size: 48
+  - file: "gfonts://Oswald"
+    id: oswald_med
+    size: 22
+
+touchscreen:
+  - platform: xpt2046
+    spi_id: touch
+    cs_pin: GPIO33
+    interrupt_pin: GPIO36
+    update_interval: 50ms
+    threshold: 400
+    id: my_touch
+    calibration:
+      x_min: 300
+      x_max: 3500
+      y_min: 200
+      y_max: 3520
+    on_touch:
+      - lambda: |-
+          id(cal_x) = touch.x;
+          id(cal_y) = touch.y;
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: true
+  on_ble_advertise:
+    then:
+      - lambda: |-
+          std::string mac = x.address_str();
+          std::string name = x.get_name();
+          if (name.rfind("esphome", 0) == 0) return;
+          if (id(ble_seen).find(mac) == id(ble_seen).end()) {
+            id(ble_seen).insert(mac);
+            id(ble_count) += 1;
+          }
+          if (name.length() > 0) {
+            id(last_ble_name) = name;
+          } else {
+            id(last_ble_name) = mac;
+          }
+
+bluetooth_proxy:
+  active: true
+
+display:
+  - platform: ili9xxx
+    model: ILI9341
+    spi_id: lcd
+    cs_pin: GPIO15
+    dc_pin: GPIO2
+    data_rate: 20MHz
+    invert_colors: false
+    color_order: bgr
+    color_palette: 8BIT
+    rotation: 90
+    update_interval: 1s
+    lambda: |-
+      auto RED    = Color(255, 0, 0);
+      auto WHITE  = Color(255, 255, 255);
+      auto GRAY   = Color(80, 80, 80);
+      auto LGRAY  = Color(160, 160, 160);
+      auto BLACK  = Color(0, 0, 0);
+      auto DKRED  = Color(120, 0, 0);
+      auto ORANGE = Color(255, 140, 0);
+
+      it.fill(BLACK);
+
+      it.filled_rectangle(0, 0, 320, 36, RED);
+      it.printf(10, 6, id(os_bold), WHITE, "ESP HEIZSTAB");
+      it.printf(148, 12, id(os_small), Color(255,180,180), "v" ESPHOME_PROJECT_VERSION);
+      it.printf(220, 8, id(os_small), WHITE, "%.0f dBm", id(wifi_signal_db).state);
+      int sig = (int)id(wifi_signal_db).state;
+      auto bar_col = [&](int threshold) { return sig > threshold ? WHITE : DKRED; };
+      it.filled_rectangle(285, 26, 6, 8,  bar_col(-90));
+      it.filled_rectangle(293, 20, 6, 14, bar_col(-75));
+      it.filled_rectangle(301, 14, 6, 20, bar_col(-65));
+      it.filled_rectangle(309, 8,  6, 26, bar_col(-55));
+
+      it.printf(10, 44, id(os_small), LGRAY, "IP");
+      it.printf(30, 43, id(os_med), WHITE, "%s", id(wifi_ip).state.c_str());
+      it.filled_rectangle(0, 68, 320, 1, RED);
+
+      it.printf(10, 73, id(os_small), RED, "BLUETOOTH  /  30s");
+      it.printf(10, 90, id(oswald_big), WHITE, "%d", id(ble_count));
+      it.printf(80, 95, id(os_small), LGRAY, "Geraete");
+      it.printf(80, 112, id(os_small), LGRAY, "erkannt");
+      it.filled_rectangle(140, 88, 1, 60, GRAY);
+      it.printf(150, 90, id(os_small), RED, "ZULETZT");
+      it.printf(150, 108, id(os_med), WHITE, "%s", id(last_ble_name).c_str());
+      it.filled_rectangle(0, 158, 320, 1, RED);
+
+      it.printf(10, 164, id(os_small), RED, "SSR / HEIZSTAB");
+      int lv = id(heizstab_level);
+      const char* lvl_str[] = {"AUS", "25%", "50%", "75%", "100%"};
+      auto lv_col = lv == 0 ? LGRAY : ORANGE;
+      it.printf(10, 178, id(oswald_med), lv_col, "%s", lvl_str[lv]);
+
+      // Touch-Debug (nach Bestätigung entfernen)
+      it.printf(170, 164, id(os_small), GRAY, "T:%d,%d",
+                id(cal_x), id(cal_y));
+
+      int bx[] = {9, 70, 131, 192, 253};
+      const char* bl[] = {"0", "1/4", "1/2", "3/4", "1"};
+      for (int i = 0; i < 5; i++) {
+        bool active = (i == lv);
+        it.filled_rectangle(bx[i], 207, 58, 28,
+                            active ? RED : Color(40, 40, 40));
+        it.printf(bx[i] + 29, 221, id(os_small),
+                  active ? WHITE : LGRAY,
+                  TextAlign::CENTER, "%s", bl[i]);
+      }

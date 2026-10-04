@@ -1,11 +1,17 @@
-esphome:
-  name: esphome-web-69f790
+# Anpassbare Werte. Eigene Werte nicht hier eintragen, sondern in einer lokalen Datei,
+# die diese Config als Package einbindet (siehe README „Installation“).
+substitutions:
+  device_name: heizstab
   friendly_name: ESP Heizstab
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
   min_version: 2026.4.0
   name_add_mac_suffix: false
   project:
     name: "heizstab.controller"
-    version: "1.4.0"
+    version: "1.4.1"
   # Nach einem Neustart die zuletzt gewählte Stufe wieder aktivieren
   on_boot:
     priority: -100

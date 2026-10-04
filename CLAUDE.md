@@ -19,8 +19,8 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
   (`HANDSHAKESTATE_READ_FAILED`, HA meldet `invalid_psk`). Ohne Bluetooth: DRAM 26 %,
   Image 0,95 MB statt 1,38 MB.
 - **Erstes Flashen nach Arduino → esp-idf und bei kaputtem WLAN nur per USB** über
-  web.esphome.io (CH340-Treiber nötig, Datenkabel). Im Heizungsraum gibt es mehrere
-  Mesh-APs mit derselben SSID; das ESP nimmt beim Start den stärksten.
+  web.esphome.io (CH340-Treiber nötig, Datenkabel). Bei mehreren Mesh-APs mit derselben
+  SSID nimmt das ESP beim Start den stärksten; ein Neustart kann das Signal verbessern.
 - **GPIO2 (DC) und GPIO15 (CS) sind ebenfalls Strapping-Pins**, deshalb steht auch dort
   `ignore_strapping_warning: true`.
 - **Die Touch-Achsen sind durch `rotation: 90` vertauscht** (x = Zeile 0–320, y = Spalte
@@ -29,6 +29,11 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
   aus. Eine Lösung per `transform:` wurde auf der Hardware noch nicht getestet.
 
 ## Config-Konventionen
+
+- **Das Repo ist unabhängig von einer bestimmten Installation.** Keine privaten Gerätenamen,
+  Entity-IDs, IPs, MAC-Adressen oder Messdaten in Repo-Dateien. Installationsspezifisches
+  steht als Platzhalter unter `substitutions`. Der Nutzer überschreibt die Werte in seiner
+  lokalen Dashboard-Datei, die `heizstab.yaml` als GitHub-Package einbindet (siehe README).
 
 - Die Leistung wird nur über das Script `set_heizstab_level` gesetzt. Es aktualisiert das
   Global, die PWM und die HA-Number gemeinsam. Touch-Buttons und `set_action` rufen nur
@@ -47,6 +52,8 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
 
 ## Arbeitsweise
 
+- Änderungen nie direkt auf `main` pushen: Branch anlegen, Pull Request öffnen, Merge erst
+  nach Freigabe durch den Nutzer.
 - Änderungen an `heizstab.yaml` immer als **komplette Datei** liefern, keine Teil-Snippets.
 - Vor jedem Commit `esphome config heizstab.yaml` zur Validierung ausführen, falls ESPHome
   verfügbar ist.

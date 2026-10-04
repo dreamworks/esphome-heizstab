@@ -30,6 +30,11 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
 
 ## Config-Konventionen
 
+- **Das Repo ist unabhängig von einem bestimmten Home Assistant.** Keine privaten
+  Entity-IDs, Gerätenamen, IPs oder MAC-Adressen in Repo-Dateien. Alles Installationsspezifische
+  ist ein Platzhalter unter `substitutions`. Der Nutzer überschreibt die Werte in seiner
+  lokalen Dashboard-Datei, die `heizstab.yaml` als GitHub-Package einbindet (siehe README).
+
 - Die Leistung wird nur über das Script `set_heizstab_level` gesetzt. Es aktualisiert das
   Global, die PWM und die HA-Number gemeinsam. Touch-Buttons und `set_action` rufen nur
   dieses Script auf.

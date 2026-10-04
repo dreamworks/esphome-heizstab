@@ -35,8 +35,8 @@ das 2,8"-Touchdisplay eines ESP32-2432S028R („Cheap Yellow Display“) oder ü
 - Stufen **0 / 25 / 50 / 75 / 100 %** (0 / 750 / 1500 / 2250 / 3000 W)
 - Bedienung über **Touch-Buttons** am Display
 - Integration in **Home Assistant** über die native API (Number-Entity für die Leistungsstufe)
-- **Bluetooth-Proxy** für Home Assistant
-- Zähler der in Reichweite sichtbaren **BLE-Geräte** auf dem Display
+- Anzeige, ob **Home Assistant verbunden** ist
+- Bewusst **ohne Bluetooth** (siehe [Bekannte Eigenheiten](#bekannte-eigenheiten-des-cyd))
 
 ## Hardware
 
@@ -140,8 +140,7 @@ In der unteren Buttonleiste (`0`, `1/4`, `1/2`, `3/4`, `1`) wählst du die Leist
 die aktive Stufe ist rot hinterlegt. Außerdem zeigt das Display:
 
 - WLAN-Signalstärke und IP-Adresse
-- Anzahl der BLE-Geräte, die in den letzten 30 s gesehen wurden, und den Namen des zuletzt
-  gesehenen Geräts
+- ob Home Assistant gerade verbunden ist (`verbunden` / `getrennt`)
 - die aktuelle Heizstab-Stufe (`AUS` / `25%` … `100%`)
 
 ### In Home Assistant
@@ -170,10 +169,13 @@ Der eingebaute Thermostat des MDC 230 begrenzt unabhängig davon die Wassertempe
 - **GPIO12 ist ein Strapping-Pin.** Er wird trotzdem als Display-MISO genutzt, daher steht
   in der Config `ignore_strapping_warning: true`.
 - **RAM:** Der Framebuffer passt nur mit `color_palette: 8BIT` in den Speicher.
-- **OTA bei BLE + WiFi:** Bei aktivem Bluetooth-Proxy wird der Heap knapp. Größere
-  OTA-Updates brechen deshalb ab. In dem Fall per USB flashen. Die Config nutzt deshalb das
-  sparsamere Framework `esp-idf` und ein BLE-Scanfenster von 300 ms pro 320 ms, damit
-  WLAN und Bluetooth sich das Funkmodul teilen können.
+- **Kein Bluetooth:** Das ESP32 des CYD hat keinen Zusatzspeicher (PSRAM). Bluetooth-Proxy,
+  Display-Framebuffer, WLAN und verschlüsselte API zusammen ließen den freien Heap auf rund
+  100 Bytes schrumpfen. Die Folge: WLAN-Abbrüche, abgebrochene OTA-Updates, und Home Assistant
+  konnte keine verschlüsselte Verbindung aufbauen. Seit v1.3.0 ist Bluetooth deshalb entfernt.
+  Für einen Bluetooth-Proxy besser ein eigenes ESP32 ohne Display verwenden.
+- **WLAN-Mesh:** Bei mehreren Zugangspunkten mit derselben SSID wählt das ESP beim Start den
+  stärksten. Ein Neustart kann deshalb ein deutlich besseres Signal bringen.
 - **Wechsel des Frameworks:** Wer von einer älteren `arduino`-Version dieser Config kommt,
   muss einmal per USB flashen, weil sich die Partitionstabelle ändern kann.
 - **Touch-Achsen:** Durch `rotation: 90` sind die Touch-Achsen vertauscht

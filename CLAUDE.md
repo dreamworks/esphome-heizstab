@@ -3,7 +3,7 @@
 ESPHome-Config (`heizstab.yaml`) für einen Heizstab-Controller auf einem ESP32-2432S028R
 („Cheap Yellow Display“, ILI9341 + XPT2046). Ein Fotek SSR-40DA an GPIO27 regelt einen
 Heizlando MDC 230 (3 kW) per Burst-Fire (`slow_pwm`, 60 s Periode, Stufen 0/25/50/75/100 %).
-Zusätzlich laufen ein Bluetooth-Proxy und ein BLE-Gerätezähler. Das Repo ist **öffentlich**.
+Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
 
 ## Hardware-Learnings (CYD)
 
@@ -13,9 +13,14 @@ Zusätzlich laufen ein Bluetooth-Proxy und ein BLE-Gerätezähler. Das Repo ist 
   Display eintragen.
 - **GPIO12 ist ein Strapping-Pin** und braucht deshalb `ignore_strapping_warning: true`.
 - **`color_palette: 8BIT` ist nötig,** sonst reicht der RAM nicht für den Framebuffer.
-- **Große OTA-Updates scheitern bei laufendem BLE+WiFi am Heap.** Dann per USB flashen.
-  Gegenmaßnahmen in der Config: `framework: esp-idf` und ein BLE-Scan mit window < interval
-  (300/320 ms). Bei 100 % Scan-Duty-Cycle hat das WLAN keine Sendezeit mehr.
+- **Kein Bluetooth auf diesem Board einbauen.** Ohne PSRAM passen BLE-Stack (Proxy),
+  8-Bit-Framebuffer, WLAN und Noise-API nicht gemeinsam in den RAM. Mit Bluetooth lief der
+  Heap auf ~124 Bytes leer: WLAN-Abbrüche, OTA-Abbrüche, Noise-Handshake scheitert
+  (`HANDSHAKESTATE_READ_FAILED`, HA meldet `invalid_psk`). Ohne Bluetooth: DRAM 26 %,
+  Image 0,95 MB statt 1,38 MB.
+- **Erstes Flashen nach Arduino → esp-idf und bei kaputtem WLAN nur per USB** über
+  web.esphome.io (CH340-Treiber nötig, Datenkabel). Im Heizungsraum gibt es mehrere
+  Mesh-APs mit derselben SSID; das ESP nimmt beim Start den stärksten.
 - **GPIO2 (DC) und GPIO15 (CS) sind ebenfalls Strapping-Pins**, deshalb steht auch dort
   `ignore_strapping_warning: true`.
 - **Die Touch-Achsen sind durch `rotation: 90` vertauscht** (x = Zeile 0–320, y = Spalte

@@ -5,7 +5,7 @@ esphome:
   name_add_mac_suffix: false
   project:
     name: "heizstab.controller"
-    version: "1.2.0"
+    version: "1.3.0"
 
 esp32:
   board: esp32dev
@@ -28,28 +28,10 @@ wifi:
 captive_portal:
 
 globals:
-  - id: ble_count
-    type: int
-    restore_value: no
-    initial_value: '0'
-  - id: last_ble_name
-    type: std::string
-    restore_value: no
-    initial_value: '""'
-  - id: ble_seen
-    type: std::set<std::string>
-    restore_value: no
   - id: heizstab_level
     type: int
     restore_value: no
     initial_value: '0'
-
-interval:
-  - interval: 30s
-    then:
-      - lambda: |-
-          id(ble_count) = 0;
-          id(ble_seen).clear();
 
 spi:
   - id: lcd
@@ -204,7 +186,6 @@ touchscreen:
     spi_id: touch
     cs_pin: GPIO33
     interrupt_pin: GPIO36
-    update_interval: 50ms
     threshold: 400
     id: my_touch
     calibration:
@@ -213,31 +194,8 @@ touchscreen:
       y_min: 200
       y_max: 3520
 
-esp32_ble_tracker:
-  scan_parameters:
-    # Fenster < Intervall, damit WiFi auf dem gemeinsamen Funkmodul Sendezeit bekommt
-    interval: 320ms
-    window: 300ms
-    active: true
-  on_ble_advertise:
-    then:
-      - lambda: |-
-          std::string mac = x.address_str();
-          std::string name = x.get_name();
-          if (name.rfind("esphome", 0) == 0) return;
-          if (id(ble_seen).find(mac) == id(ble_seen).end()) {
-            id(ble_seen).insert(mac);
-            id(ble_count) += 1;
-          }
-          if (name.length() > 0) {
-            id(last_ble_name) = name;
-          } else {
-            id(last_ble_name) = mac;
-          }
-
-bluetooth_proxy:
-  active: true
-
+# Kein Bluetooth: BLE-Stack + Display-Framebuffer + WiFi + verschlüsselte API
+# passen ohne PSRAM nicht gemeinsam in den RAM (Heap lief auf ~100 Bytes leer).
 display:
   - platform: ili9xxx
     model: ILI9341
@@ -280,13 +238,10 @@ display:
       it.printf(30, 43, id(os_med), WHITE, "%s", id(wifi_ip).state.c_str());
       it.filled_rectangle(0, 68, 320, 1, RED);
 
-      it.printf(10, 73, id(os_small), RED, "BLUETOOTH  /  30s");
-      it.printf(10, 90, id(oswald_big), WHITE, "%d", id(ble_count));
-      it.printf(80, 95, id(os_small), LGRAY, "Geraete");
-      it.printf(80, 112, id(os_small), LGRAY, "erkannt");
-      it.filled_rectangle(140, 88, 1, 60, GRAY);
-      it.printf(150, 90, id(os_small), RED, "ZULETZT");
-      it.printf(150, 108, id(os_med), WHITE, "%s", id(last_ble_name).c_str());
+      it.printf(10, 73, id(os_small), RED, "HOME ASSISTANT");
+      bool ha = api::global_api_server->is_connected();
+      it.printf(10, 95, id(oswald_med), ha ? WHITE : ORANGE, "%s",
+                ha ? "verbunden" : "getrennt");
       it.filled_rectangle(0, 158, 320, 1, RED);
 
       it.printf(10, 164, id(os_small), RED, "SSR / HEIZSTAB");

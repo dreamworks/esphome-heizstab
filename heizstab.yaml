@@ -1,3 +1,9 @@
+substitutions:
+  # Temperaturstopp: ab max_temp aus, unter resume_temp wieder an (Rücklauf, °C)
+  max_temp: "50"
+  resume_temp: "45"
+  temp_entity: sensor.esphome_web_5a4e92_r_cklauf
+
 esphome:
   name: esphome-web-69f790
   friendly_name: ESP Heizstab
@@ -5,7 +11,7 @@ esphome:
   name_add_mac_suffix: false
   project:
     name: "heizstab.controller"
-    version: "1.4.0"
+    version: "1.5.0"
   # Nach einem Neustart die zuletzt gewählte Stufe wieder aktivieren
   on_boot:
     priority: -100
@@ -40,6 +46,11 @@ globals:
     type: int
     restore_value: yes
     initial_value: '0'
+  # true, solange der Rücklauf über max_temp lag und noch nicht unter resume_temp ist
+  - id: temp_stop
+    type: bool
+    restore_value: no
+    initial_value: 'false'
 
 spi:
   - id: lcd
@@ -71,6 +82,7 @@ light:
 
 # Einzige Stelle, die die Leistung setzt: Global, SSR-PWM und HA-Number
 # werden gemeinsam aktualisiert, damit Display und Home Assistant synchron sind.
+# Bei aktivem Temperaturstopp bleibt die gewählte Stufe erhalten, das SSR aber aus.
 script:
   - id: set_heizstab_level
     mode: queued
@@ -80,7 +92,7 @@ script:
       - lambda: |-
           int l = lv < 0 ? 0 : (lv > 4 ? 4 : lv);
           id(heizstab_level) = l;
-          id(heizstab_pwm).set_level(l * 0.25f);
+          id(heizstab_pwm).set_level(id(temp_stop) ? 0.0f : l * 0.25f);
           id(heizstab_pct).publish_state(l * 25.0f);
 
 number:
@@ -97,9 +109,15 @@ number:
           id: set_heizstab_level
           lv: !lambda 'return (int)(x / 25.0f + 0.5f);'
 
+binary_sensor:
+  - platform: template
+    id: temp_stop_sensor
+    name: "Temperaturstopp"
+    device_class: heat
+    lambda: 'return id(temp_stop);'
+
 # x = vertikale Achse (Buttonzeile), y = horizontale Achse (welcher Button)
 # y-Bereiche grenzen lückenlos aneinander, ohne Überlappung (Grenzen inklusiv)
-binary_sensor:
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 0%"
@@ -166,6 +184,25 @@ sensor:
     id: wifi_signal_db
     name: "WiFi Signal"
     update_interval: 60s
+  # Rücklauftemperatur aus Home Assistant für den Temperaturstopp.
+  # Ist der Wert nicht verfügbar (NaN), bleibt der Zustand unverändert;
+  # Thermostat und STB des MDC 230 bleiben die eigentliche Schutzebene.
+  - platform: homeassistant
+    id: ruecklauf
+    entity_id: ${temp_entity}
+    internal: true
+    on_value:
+      - lambda: |-
+          if (std::isnan(x)) return;
+          if (!id(temp_stop) && x >= ${max_temp}) {
+            id(temp_stop) = true;
+            id(heizstab_pwm).set_level(0.0f);
+            id(temp_stop_sensor).publish_state(true);
+          } else if (id(temp_stop) && x <= ${resume_temp}) {
+            id(temp_stop) = false;
+            id(heizstab_pwm).set_level(id(heizstab_level) * 0.25f);
+            id(temp_stop_sensor).publish_state(false);
+          }
 
 text_sensor:
   - platform: wifi_info
@@ -250,6 +287,16 @@ display:
       bool ha = api::global_api_server->is_connected();
       it.printf(10, 95, id(oswald_med), ha ? WHITE : ORANGE, "%s",
                 ha ? "verbunden" : "getrennt");
+      it.printf(170, 73, id(os_small), RED, "RUECKLAUF");
+      if (std::isnan(id(ruecklauf).state)) {
+        it.printf(170, 95, id(oswald_med), LGRAY, "-- °C");
+      } else {
+        it.printf(170, 95, id(oswald_med), id(temp_stop) ? ORANGE : WHITE,
+                  "%.1f °C", id(ruecklauf).state);
+      }
+      if (id(temp_stop)) {
+        it.printf(170, 125, id(os_small), ORANGE, "TEMP-STOPP");
+      }
       it.filled_rectangle(0, 158, 320, 1, RED);
 
       it.printf(10, 164, id(os_small), RED, "SSR / HEIZSTAB");

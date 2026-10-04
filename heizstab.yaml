@@ -1,12 +1,17 @@
+# Alle anpassbaren Werte. Eigene Werte am besten NICHT hier eintragen, sondern in einer
+# lokalen Datei, die diese Config als Package einbindet (siehe README „Installation“).
 substitutions:
+  device_name: heizstab
+  friendly_name: ESP Heizstab
+  # Home-Assistant-Entity der Rücklauftemperatur (für Stopp und Automatik)
+  temp_entity: sensor.heizung_ruecklauf
   # Temperaturstopp: ab max_temp aus, unter resume_temp wieder an (Rücklauf, °C)
   max_temp: "50"
   resume_temp: "45"
-  temp_entity: sensor.esphome_web_5a4e92_r_cklauf
 
 esphome:
-  name: esphome-web-69f790
-  friendly_name: ESP Heizstab
+  name: ${device_name}
+  friendly_name: ${friendly_name}
   min_version: 2026.4.0
   name_add_mac_suffix: false
   project:

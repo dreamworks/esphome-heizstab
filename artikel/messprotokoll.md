@@ -6,7 +6,9 @@ nicht anders angegeben.
 
 ## Ausgangslage
 
+- **Altbau mit geringer Dämmung.**
 - Alte Ölheizung, kein Öl mehr im Tank. PV-Anlage mit Hausbatterie vorhanden.
+- Heizwasser vor Beginn kalt: Rücklauf 18,2 °C (16:10), etwa Raumtemperatur.
 - Ziel: Heizkreis elektrisch mit einem Heizstab beheizen, später gezielt mit
   PV-Überschuss.
 - Hardware: Heizlando MDC 230 (3 kW, Thermostat 30–75 °C, STB 85 °C),
@@ -102,6 +104,22 @@ Verbindung überfordert. Dazu hing die erste Firmware an einem schwachen
 Zugangspunkt fest. Für den Artikel: Ein Board, das ein Display treibt, sollte
 nicht nebenbei noch Bluetooth-Proxy spielen.
 
+### Abkühlung und Wärmeverlust (vorläufige Abschätzung)
+
+- **Abkühlung in der Pause 22:00–22:19** (Heizstab aus, Pumpe läuft): Rücklauf
+  28,9 °C → 27,9 °C, also ca. **3,5 K pro Stunde** bei ca. 9 K über Ausgangstemperatur.
+- Die Abkühlung verläuft exponentiell (Zeitkonstante grob 3 h). Über Nacht (8 h)
+  wäre das Wasser praktisch wieder bei der Ausgangstemperatur von 19–20 °C.
+- **Wärmeverlust des Hauses**, geschätzt aus Aufheizen (+5,5 K/h bei 2,8 kW) und
+  Abkühlen (−3,5 K/h): ca. **1 kW** bei diesem Temperaturniveau.
+  → Um die Temperatur zu halten, liefe der Heizstab im Mittel etwa ein Drittel der
+  Zeit, also ca. **25 kWh pro Tag**: ca. 9 € mit Netzstrom (0,35 €/kWh) bzw. ca. 5 €
+  als Öl-Äquivalent (0,19 €/kWh Wärme).
+- **Vorbehalt:** Die Schätzung beruht auf 15 Minuten Abkühlung, nur dem
+  Rücklauffühler und einem Oktoberabend. Sie muss durch eine Messung über einen
+  ganzen Tag (Taktung des Thermostats, kWh auf L1) bestätigt werden. Bei
+  kälterem Wetter steigt der Bedarf deutlich.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein
@@ -124,6 +142,7 @@ nicht nebenbei noch Bluetooth-Proxy spielen.
 - [ ] Temperatur SSR-Kühlkörper unter Volllast prüfen
 - [ ] Fragen an den Heizungsbauer (Martin): Durchfluss/Pumpenstufe, Ölkessel
       absperren, Thermostat-Einstellung, Entlüften/Anlagendruck
-- [ ] Tatsächliche Heizlast im Normalbetrieb messen (kWh pro Tag)
+- [ ] Tatsächliche Heizlast im Normalbetrieb messen (kWh pro Tag) und mit der
+      Abschätzung von ca. 25 kWh/Tag vergleichen; Außentemperatur dazu notieren
 - [ ] Automation „Heizstab nur bei PV-Überschuss“
 - [ ] Eigenen Strompreis und Einspeisevergütung eintragen

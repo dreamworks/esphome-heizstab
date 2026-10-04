@@ -57,6 +57,17 @@ nicht anders angegeben.
   taktet der Thermostat, und es wird nur noch die tatsächliche Heizlast des
   Hauses verbraucht. Diese wird in den nächsten Tagen gemessen.
 
+### Zwischenstand 20:49
+
+- **Heizzeit gesamt:** 92 min, **4,23 kWh** (aus dem Leistungsverlauf L1 integriert,
+  Grundlast 436 W abgezogen)
+- **Rücklauf:** 25,9 °C, also +6,3 K seit Beginn (19,6 °C um 18:10)
+- **Akku:** 31,5 %
+- **Kosten bisher:** ca. 0,34 € (bewertet mit Einspeisevergütung 0,08 €/kWh)
+  bzw. ca. 1,48 € (mit Netzstrom 0,35 €/kWh)
+- Um 20:33 hat der Thermostat des MDC 230 erstmals kurz abgeschaltet und nach
+  etwa einer Minute wieder eingeschaltet. Vermutlich steht er nahe 30 °C.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

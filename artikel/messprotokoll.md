@@ -78,6 +78,26 @@ nicht anders angegeben.
 - ESP wechselt alle paar Minuten zwischen online und offline (WLAN), der
   Heizstab läuft dabei ununterbrochen weiter.
 
+### Abschluss des Abends
+
+- **21:48–21:51:** Thermostat des MDC 230 schaltet erstmals für etwa 3 Minuten ab.
+  Ab jetzt taktet der Heizstab, statt durchzulaufen.
+- **ab ca. 21:45:** Akku bei 7 % (Untergrenze), danach Netzstrom
+- **22:00:** Heizstab aus, weil das ESP zum Flashen vom Netzteil getrennt wurde
+- **Bilanz Testheizen 18:07–22:00:** etwa **6,5 kWh** ins Heizwasser, Rücklauf
+  von 19,6 °C auf 28,9 °C (+9,3 K)
+- **22:06:** Firmware v1.2.0 per USB geflasht, ESP bucht sich beim Start in den
+  stärksten Mesh-Zugangspunkt ein: **−61 dBm statt −77 bis −80 dBm**. Aber der
+  freie Speicher sinkt auf **124 Bytes**, Home Assistant kann sich nicht verbinden.
+- **22:15:** v1.3.0 ohne Bluetooth per USB geflasht. RAM-Belegung 26 % statt 58 %.
+- **22:18:** ESP stabil in Home Assistant, WLAN −60 dBm.
+
+**Ursache aller Verbindungsprobleme des Abends:** Das Display-Board (ESP32 ohne
+Zusatzspeicher) war mit Bluetooth-Proxy, Display, WLAN und verschlüsselter
+Verbindung überfordert. Dazu hing die erste Firmware an einem schwachen
+Zugangspunkt fest. Für den Artikel: Ein Board, das ein Display treibt, sollte
+nicht nebenbei noch Bluetooth-Proxy spielen.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

@@ -14,8 +14,22 @@ Zusätzlich laufen ein Bluetooth-Proxy und ein BLE-Gerätezähler. Das Repo ist 
 - **GPIO12 ist ein Strapping-Pin** und braucht deshalb `ignore_strapping_warning: true`.
 - **`color_palette: 8BIT` ist nötig,** sonst reicht der RAM nicht für den Framebuffer.
 - **Große OTA-Updates scheitern bei laufendem BLE+WiFi am Heap.** Dann per USB flashen.
-- **Die Touch-Achsen sind durch `rotation: 90` vertauscht** (x = Zeile, y = Spalte). Das ist
-  beim Definieren von Touch-Bereichen für Buttons zu beachten.
+  Gegenmaßnahmen in der Config: `framework: esp-idf` und ein BLE-Scan mit window < interval
+  (300/320 ms). Bei 100 % Scan-Duty-Cycle hat das WLAN keine Sendezeit mehr.
+- **GPIO2 (DC) und GPIO15 (CS) sind ebenfalls Strapping-Pins**, deshalb steht auch dort
+  `ignore_strapping_warning: true`.
+- **Die Touch-Achsen sind durch `rotation: 90` vertauscht** (x = Zeile 0–320, y = Spalte
+  0–240, also gestaucht gegenüber den Display-Koordinaten). Die y-Bereiche der Buttons sind
+  empirisch ermittelt und dürfen sich nicht überlappen, sonst lösen zwei Buttons gleichzeitig
+  aus. Eine Lösung per `transform:` wurde auf der Hardware noch nicht getestet.
+
+## Config-Konventionen
+
+- Die Leistung wird nur über das Script `set_heizstab_level` gesetzt. Es aktualisiert das
+  Global, die PWM und die HA-Number gemeinsam. Touch-Buttons und `set_action` rufen nur
+  dieses Script auf.
+- `api_encryption_key` dient auch für OTA (`ota: encryption: {}`). Ein separates
+  OTA-Passwort ist nicht vorgesehen.
 
 ## Arbeitsweise
 

@@ -77,8 +77,12 @@ das 2,8"-Touchdisplay eines ESP32-2432S028R („Cheap Yellow Display“) oder ü
    cd esphome-heizstab
    cp secrets.yaml.example secrets.yaml
    ```
-3. In `secrets.yaml` die eigenen Zugangsdaten eintragen. Die Datei steht in `.gitignore`
-   und wird nicht committet.
+3. In `secrets.yaml` die eigenen Werte eintragen. Die Datei steht in `.gitignore` und wird
+   nicht committet.
+   - `wifi_ssid`, `wifi_password`: WLAN-Zugang
+   - `ap_password`: Passwort für den Fallback-Hotspot (mindestens 8 Zeichen)
+   - `api_encryption_key`: Schlüssel für die Home-Assistant-API **und** für OTA-Updates,
+     erzeugen mit `openssl rand -base64 32`. Home Assistant fragt beim Einbinden danach.
 4. Konfiguration prüfen:
    ```bash
    esphome config heizstab.yaml
@@ -106,7 +110,8 @@ die aktive Stufe ist rot hinterlegt. Außerdem zeigt das Display:
 ### In Home Assistant
 Die Leistungsstufe ist als Number-Entity **„Heizstab Leistung“** (0–100 %, Schrittweite 25)
 verfügbar. Damit lässt sich der Heizstab per Dashboard, Automation oder Skript steuern,
-z. B. um PV-Überschuss zu nutzen.
+z. B. um PV-Überschuss zu nutzen. Eine Änderung am Display wird sofort an Home Assistant
+gemeldet und umgekehrt.
 
 Nach einem Neustart des ESP steht die Leistung immer auf 0 %.
 
@@ -129,7 +134,11 @@ Der eingebaute Thermostat des MDC 230 begrenzt unabhängig davon die Wassertempe
   in der Config `ignore_strapping_warning: true`.
 - **RAM:** Der Framebuffer passt nur mit `color_palette: 8BIT` in den Speicher.
 - **OTA bei BLE + WiFi:** Bei aktivem Bluetooth-Proxy wird der Heap knapp. Größere
-  OTA-Updates brechen deshalb ab. In dem Fall per USB flashen.
+  OTA-Updates brechen deshalb ab. In dem Fall per USB flashen. Die Config nutzt deshalb das
+  sparsamere Framework `esp-idf` und ein BLE-Scanfenster von 300 ms pro 320 ms, damit
+  WLAN und Bluetooth sich das Funkmodul teilen können.
+- **Wechsel des Frameworks:** Wer von einer älteren `arduino`-Version dieser Config kommt,
+  muss einmal per USB flashen, weil sich die Partitionstabelle ändern kann.
 - **Touch-Achsen:** Durch `rotation: 90` sind die Touch-Achsen vertauscht
   (x entspricht der Zeile, y der Spalte).
 

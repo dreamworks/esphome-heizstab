@@ -5,24 +5,28 @@ esphome:
   name_add_mac_suffix: false
   project:
     name: "heizstab.controller"
-    version: "1.0.0"          # ← neu, oben im esphome:-Block
+    version: "1.1.0"
 
 esp32:
   board: esp32dev
   variant: esp32
   cpu_frequency: 240MHz
   framework:
-    type: arduino
+    type: esp-idf
 
 logger:
 api:
+  encryption:
+    key: !secret api_encryption_key
 ota:
   - platform: esphome
+    encryption: {}            # nutzt den API-Key, kein separates OTA-Passwort
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  ap: {}
+  ap:
+    password: !secret ap_password
 
 captive_portal:
 
@@ -42,14 +46,6 @@ globals:
     type: int
     restore_value: no
     initial_value: '0'
-  - id: cal_x
-    type: int
-    restore_value: no
-    initial_value: '-1'
-  - id: cal_y
-    type: int
-    restore_value: no
-    initial_value: '-1'
 
 interval:
   - interval: 30s
@@ -86,6 +82,20 @@ light:
     id: back_light
     restore_mode: ALWAYS_ON
 
+# Einzige Stelle, die die Leistung setzt: Global, SSR-PWM und HA-Number
+# werden gemeinsam aktualisiert, damit Display und Home Assistant synchron sind.
+script:
+  - id: set_heizstab_level
+    mode: queued
+    parameters:
+      lv: int
+    then:
+      - lambda: |-
+          int l = lv < 0 ? 0 : (lv > 4 ? 4 : lv);
+          id(heizstab_level) = l;
+          id(heizstab_pwm).set_level(l * 0.25f);
+          id(heizstab_pct).publish_state(l * 25.0f);
+
 number:
   - platform: template
     name: "Heizstab Leistung"
@@ -93,75 +103,76 @@ number:
     min_value: 0
     max_value: 100
     step: 25
+    initial_value: 0
     unit_of_measurement: "%"
-    lambda: |-
-      return id(heizstab_level) * 25.0f;
     set_action:
-      - lambda: |-
-          int lv = (int)(x / 25.0f + 0.5f);
-          if (lv < 0) lv = 0;
-          if (lv > 4) lv = 4;
-          id(heizstab_level) = lv;
-          float lvl[] = {0.0f, 0.25f, 0.5f, 0.75f, 1.0f};
-          id(heizstab_pwm).set_level(lvl[lv]);
+      - script.execute:
+          id: set_heizstab_level
+          lv: !lambda 'return (int)(x / 25.0f + 0.5f);'
 
 # x = vertikale Achse (Buttonzeile), y = horizontale Achse (welcher Button)
+# y-Bereiche grenzen lückenlos aneinander, ohne Überlappung (Grenzen inklusiv)
 binary_sensor:
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 0%"
+    internal: true
     x_min: 265
     x_max: 320
-    y_min: 10
-    y_max: 65
+    y_min: 0
+    y_max: 59
     on_press:
-      - lambda: |-
-          id(heizstab_level) = 0;
-          id(heizstab_pwm).set_level(0.0f);
+      - script.execute:
+          id: set_heizstab_level
+          lv: 0
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 25%"
+    internal: true
     x_min: 265
     x_max: 320
-    y_min: 55
-    y_max: 107
+    y_min: 60
+    y_max: 102
     on_press:
-      - lambda: |-
-          id(heizstab_level) = 1;
-          id(heizstab_pwm).set_level(0.25f);
+      - script.execute:
+          id: set_heizstab_level
+          lv: 1
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 50%"
+    internal: true
     x_min: 265
     x_max: 320
-    y_min: 97
-    y_max: 150
+    y_min: 103
+    y_max: 145
     on_press:
-      - lambda: |-
-          id(heizstab_level) = 2;
-          id(heizstab_pwm).set_level(0.5f);
+      - script.execute:
+          id: set_heizstab_level
+          lv: 2
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 75%"
+    internal: true
     x_min: 265
     x_max: 320
-    y_min: 140
-    y_max: 192
+    y_min: 146
+    y_max: 187
     on_press:
-      - lambda: |-
-          id(heizstab_level) = 3;
-          id(heizstab_pwm).set_level(0.75f);
+      - script.execute:
+          id: set_heizstab_level
+          lv: 3
   - platform: touchscreen
     touchscreen_id: my_touch
     name: "Heizstab 100%"
+    internal: true
     x_min: 265
     x_max: 320
-    y_min: 182
+    y_min: 188
     y_max: 240
     on_press:
-      - lambda: |-
-          id(heizstab_level) = 4;
-          id(heizstab_pwm).set_level(1.0f);
+      - script.execute:
+          id: set_heizstab_level
+          lv: 4
 
 sensor:
   - platform: wifi_signal
@@ -204,15 +215,12 @@ touchscreen:
       x_max: 3500
       y_min: 200
       y_max: 3520
-    on_touch:
-      - lambda: |-
-          id(cal_x) = touch.x;
-          id(cal_y) = touch.y;
 
 esp32_ble_tracker:
   scan_parameters:
-    interval: 1100ms
-    window: 1100ms
+    # Fenster < Intervall, damit WiFi auf dem gemeinsamen Funkmodul Sendezeit bekommt
+    interval: 320ms
+    window: 300ms
     active: true
   on_ble_advertise:
     then:
@@ -237,8 +245,12 @@ display:
   - platform: ili9xxx
     model: ILI9341
     spi_id: lcd
-    cs_pin: GPIO15
-    dc_pin: GPIO2
+    cs_pin:
+      number: GPIO15
+      ignore_strapping_warning: true
+    dc_pin:
+      number: GPIO2
+      ignore_strapping_warning: true
     data_rate: 20MHz
     invert_colors: false
     color_order: bgr
@@ -285,10 +297,6 @@ display:
       const char* lvl_str[] = {"AUS", "25%", "50%", "75%", "100%"};
       auto lv_col = lv == 0 ? LGRAY : ORANGE;
       it.printf(10, 178, id(oswald_med), lv_col, "%s", lvl_str[lv]);
-
-      // Touch-Debug (nach Bestätigung entfernen)
-      it.printf(170, 164, id(os_small), GRAY, "T:%d,%d",
-                id(cal_x), id(cal_y));
 
       int bx[] = {9, 70, 131, 192, 253};
       const char* bl[] = {"0", "1/4", "1/2", "3/4", "1"};

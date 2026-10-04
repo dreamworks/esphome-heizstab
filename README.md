@@ -69,32 +69,69 @@ das 2,8"-Touchdisplay eines ESP32-2432S028R („Cheap Yellow Display“) oder ü
 
 ## Installation
 
-1. [ESPHome](https://esphome.io/guides/getting_started_command_line/) installieren
-   (oder das ESPHome-Add-on in Home Assistant verwenden).
-2. Repository klonen und die Secrets-Datei anlegen:
-   ```bash
-   git clone https://github.com/dreamworks/esphome-heizstab.git
-   cd esphome-heizstab
-   cp secrets.yaml.example secrets.yaml
-   ```
-3. In `secrets.yaml` die eigenen Werte eintragen. Die Datei steht in `.gitignore` und wird
-   nicht committet.
-   - `wifi_ssid`, `wifi_password`: WLAN-Zugang
-   - `ap_password`: Passwort für den Fallback-Hotspot (mindestens 8 Zeichen)
-   - `api_encryption_key`: Schlüssel für die Home-Assistant-API **und** für OTA-Updates,
-     erzeugen mit `openssl rand -base64 32`. Home Assistant fragt beim Einbinden danach.
-4. Konfiguration prüfen:
-   ```bash
-   esphome config heizstab.yaml
-   ```
-5. Den **ersten Flash per USB** durchführen:
-   ```bash
-   esphome run heizstab.yaml
-   ```
-   Spätere Updates können per OTA eingespielt werden. Wenn ein OTA-Update fehlschlägt,
-   wieder per USB flashen (siehe [Bekannte Eigenheiten](#bekannte-eigenheiten-des-cyd)).
-6. Das Gerät wird in Home Assistant automatisch erkannt und kann unter
-   *Einstellungen → Geräte & Dienste* hinzugefügt werden.
+Die Config ist für das **ESPHome-Dashboard in Home Assistant** (ESPHome-Add-on) gedacht.
+
+1. In Home Assistant das **ESPHome-Add-on** installieren und öffnen.
+2. Im Dashboard oben rechts unter **Secrets** prüfen, dass `wifi_ssid` und `wifi_password`
+   eingetragen sind. Weitere Secrets braucht die Config nicht (Vorlage:
+   [secrets.yaml.example](secrets.yaml.example)).
+3. **Neues Gerät** anlegen, oder ein bestehendes öffnen, und den Inhalt von
+   [heizstab.yaml](heizstab.yaml) komplett in den Editor kopieren. Unter `esphome:` ggf.
+   `name` und `friendly_name` anpassen.
+4. **Install → Plug into this computer:** Den ersten Flash per USB durchführen. Spätere
+   Updates gehen per OTA („Wirelessly“). Wenn ein OTA-Update fehlschlägt, wieder per USB
+   flashen (siehe [Bekannte Eigenheiten](#bekannte-eigenheiten-des-cyd)).
+5. Das Gerät wird in Home Assistant automatisch erkannt und kann unter
+   *Einstellungen → Geräte & Dienste* hinzugefügt werden. Den Schlüssel für die
+   verschlüsselte API hinterlegt Home Assistant dabei selbst.
+
+<details>
+<summary>Alternative: ESPHome auf der Kommandozeile</summary>
+
+```bash
+git clone https://github.com/dreamworks/esphome-heizstab.git
+cd esphome-heizstab
+cp secrets.yaml.example secrets.yaml   # WLAN-Daten eintragen, Datei ist gitignored
+esphome run heizstab.yaml
+```
+</details>
+
+## Sicherheit im Netzwerk
+
+Die Config kommt bewusst **ohne zusätzliche Secrets** aus, damit sie sich direkt im
+Dashboard einsetzen lässt. Das hat folgende Folgen:
+
+- **API:** Sie ist verschlüsselt (`encryption: {}`). Den Schlüssel erzeugt Home Assistant
+  beim Einbinden und hinterlegt ihn auf dem Gerät.
+- **OTA-Updates sind nicht geschützt.** ESPHome kann den zur Laufzeit hinterlegten
+  API-Schlüssel nicht für OTA verwenden. Jedes Gerät im selben Netz kann also neue Firmware
+  aufspielen.
+- **Der Fallback-Hotspot ist offen.** Findet das ESP sein WLAN nicht, öffnet es einen
+  Hotspot ohne Passwort mit Captive Portal. Wer in Funkreichweite ist, kann sich dann
+  verbinden und, weil OTA ungeschützt ist, auch Firmware aufspielen.
+
+Wer das absichern möchte, hat zwei Möglichkeiten:
+
+```yaml
+# 1. Hotspot mit Passwort
+wifi:
+  ap:
+    password: !secret ap_password
+
+# 2. Fester Schlüssel für API und OTA (erzeugen mit: openssl rand -base64 32)
+api:
+  encryption:
+    key: !secret api_encryption_key
+ota:
+  - platform: esphome
+    encryption: {}   # verwendet den API-Schlüssel
+```
+
+Alternativ entfällt der Hotspot ganz, wenn man `ap:` und `captive_portal:` entfernt. Bei
+einem neuen WLAN-Passwort muss das Gerät dann per USB neu geflasht werden.
+
+Unabhängig davon gilt: Der Thermostat und der STB des MDC 230 begrenzen die Temperatur
+hardwareseitig, auch bei manipulierter Firmware.
 
 ## Bedienung
 

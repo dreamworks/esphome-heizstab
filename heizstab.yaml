@@ -5,7 +5,7 @@ esphome:
   name_add_mac_suffix: false
   project:
     name: "heizstab.controller"
-    version: "1.1.0"
+    version: "1.2.0"
 
 esp32:
   board: esp32dev
@@ -16,17 +16,14 @@ esp32:
 
 logger:
 api:
-  encryption:
-    key: !secret api_encryption_key
+  encryption: {}              # Key wird beim Einbinden von Home Assistant hinterlegt
 ota:
-  - platform: esphome
-    encryption: {}            # nutzt den API-Key, kein separates OTA-Passwort
+  - platform: esphome         # ohne Schutz, siehe README „Sicherheit im Netzwerk“
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  ap:
-    password: !secret ap_password
+  ap: {}                      # offener Fallback-Hotspot, siehe README
 
 captive_portal:
 

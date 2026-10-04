@@ -28,8 +28,14 @@ Zusätzlich laufen ein Bluetooth-Proxy und ein BLE-Gerätezähler. Das Repo ist 
 - Die Leistung wird nur über das Script `set_heizstab_level` gesetzt. Es aktualisiert das
   Global, die PWM und die HA-Number gemeinsam. Touch-Buttons und `set_action` rufen nur
   dieses Script auf.
-- `api_encryption_key` dient auch für OTA (`ota: encryption: {}`). Ein separates
-  OTA-Passwort ist nicht vorgesehen.
+- Die Config wird im **ESPHome-Dashboard von Home Assistant** genutzt und braucht nur die
+  Secrets `wifi_ssid` und `wifi_password`. Es sollen keine weiteren Secrets dazukommen.
+- Die API ist verschlüsselt (`encryption: {}`), den Key hinterlegt HA zur Laufzeit. OTA ist
+  deshalb ungeschützt, denn ein Laufzeit-Key kann nicht für OTA genutzt werden. Der offene
+  Fallback-Hotspot (`ap: {}`) ist eine bewusste Entscheidung des Nutzers. Die Abwägung steht
+  in der README unter „Sicherheit im Netzwerk“.
+- Versionierung nach SemVer in `esphome: project: version`. Bei jeder Änderung der Config
+  die Version erhöhen.
 
 ## Arbeitsweise
 

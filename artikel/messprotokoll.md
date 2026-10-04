@@ -68,6 +68,16 @@ nicht anders angegeben.
 - Um 20:33 hat der Thermostat des MDC 230 erstmals kurz abgeschaltet und nach
   etwa einer Minute wieder eingeschaltet. Vermutlich steht er nahe 30 °C.
 
+### Zwischenstand 21:29
+
+- **Heizzeit gesamt:** 131 min, **5,97 kWh**
+- **Rücklauf:** 27,9 °C (+8,3 K seit 18:10)
+- **Akku:** 12,6 %, Netzbezug noch 0 W
+- **Kosten bisher:** ca. 0,48 € (Einspeisevergütung 0,08 €/kWh) bzw. ca. 2,09 €
+  (Netzstrom 0,35 €/kWh)
+- ESP wechselt alle paar Minuten zwischen online und offline (WLAN), der
+  Heizstab läuft dabei ununterbrochen weiter.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

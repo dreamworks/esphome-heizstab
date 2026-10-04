@@ -39,6 +39,9 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
   deshalb ungeschützt, denn ein Laufzeit-Key kann nicht für OTA genutzt werden. Der offene
   Fallback-Hotspot (`ap: {}`) ist eine bewusste Entscheidung des Nutzers. Die Abwägung steht
   in der README unter „Sicherheit im Netzwerk“.
+- Seit v1.4.0 wird die Stufe gespeichert (`restore_value: yes`) und per `on_boot` wieder
+  gesetzt. Das hat der Nutzer ausdrücklich so gewünscht: Der Heizstab soll nach Neustart
+  oder Stromausfall von selbst weiterheizen.
 - Versionierung nach SemVer in `esphome: project: version`. Bei jeder Änderung der Config
   die Version erhöhen.
 

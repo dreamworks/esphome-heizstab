@@ -149,7 +149,11 @@ verfügbar. Damit lässt sich der Heizstab per Dashboard, Automation oder Skript
 z. B. um PV-Überschuss zu nutzen. Eine Änderung am Display wird sofort an Home Assistant
 gemeldet und umgekehrt.
 
-Nach einem Neustart des ESP steht die Leistung immer auf 0 %.
+**Nach einem Neustart oder Stromausfall** stellt das ESP die zuletzt gewählte Stufe
+wieder her (seit v1.4.0). Der Heizstab heizt also von selbst weiter. Das setzt voraus, dass
+die Umwälzpumpe dauerhaft läuft. Thermostat und STB des MDC 230 bleiben die Schutzebene.
+Wer das nicht möchte, setzt in der Config bei `heizstab_level` `restore_value: no`. Dann
+startet das ESP immer mit 0 %.
 
 ## Funktionsweise der Leistungsregelung
 

@@ -95,7 +95,50 @@ script:
           id(heizstab_pwm).set_level(id(temp_stop) ? 0.0f : l * 0.25f);
           id(heizstab_pct).publish_state(l * 25.0f);
 
+  # Manuelle Eingabe (Touch oder HA-Number): schaltet die Automatik ab
+  - id: manual_level
+    mode: queued
+    parameters:
+      lv: int
+    then:
+      - if:
+          condition:
+            lambda: 'return id(modus).current_option() != std::string("Manuell");'
+          then:
+            - select.set:
+                id: modus
+                option: "Manuell"
+      - script.execute:
+          id: set_heizstab_level
+          lv: !lambda 'return lv;'
+
+  # Automatik: Stufe nach Abstand des Rücklaufs zur Zieltemperatur
+  # (>= 4 K darunter 100 %, 3 K 75 %, 2 K 50 %, 1 K 25 %, darüber 0 %)
+  - id: regulate
+    mode: queued
+    then:
+      - lambda: |-
+          if (id(modus).current_option() != std::string("Automatik")) return;
+          float t = id(ruecklauf).state;
+          if (std::isnan(t)) return;
+          float diff = id(ziel_temp).state - t;
+          int lv = diff >= 4 ? 4 : diff >= 3 ? 3 : diff >= 2 ? 2 : diff >= 1 ? 1 : 0;
+          if (lv != id(heizstab_level)) id(set_heizstab_level)->execute(lv);
+
 number:
+  - platform: template
+    name: "Zieltemperatur"
+    id: ziel_temp
+    min_value: 25
+    max_value: ${max_temp}
+    step: 1
+    initial_value: 35
+    restore_value: true
+    optimistic: true
+    unit_of_measurement: "°C"
+    on_value:
+      - script.execute: regulate
+
   - platform: template
     name: "Heizstab Leistung"
     id: heizstab_pct
@@ -106,8 +149,21 @@ number:
     unit_of_measurement: "%"
     set_action:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: !lambda 'return (int)(x / 25.0f + 0.5f);'
+
+select:
+  - platform: template
+    name: "Modus"
+    id: modus
+    options:
+      - "Manuell"
+      - "Automatik"
+    initial_option: "Manuell"
+    restore_value: true
+    optimistic: true
+    on_value:
+      - script.execute: regulate
 
 binary_sensor:
   - platform: template
@@ -128,7 +184,7 @@ binary_sensor:
     y_max: 59
     on_press:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: 0
   - platform: touchscreen
     touchscreen_id: my_touch
@@ -140,7 +196,7 @@ binary_sensor:
     y_max: 102
     on_press:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: 1
   - platform: touchscreen
     touchscreen_id: my_touch
@@ -152,7 +208,7 @@ binary_sensor:
     y_max: 145
     on_press:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: 2
   - platform: touchscreen
     touchscreen_id: my_touch
@@ -164,7 +220,7 @@ binary_sensor:
     y_max: 187
     on_press:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: 3
   - platform: touchscreen
     touchscreen_id: my_touch
@@ -176,7 +232,7 @@ binary_sensor:
     y_max: 240
     on_press:
       - script.execute:
-          id: set_heizstab_level
+          id: manual_level
           lv: 4
 
 sensor:
@@ -203,6 +259,7 @@ sensor:
             id(heizstab_pwm).set_level(id(heizstab_level) * 0.25f);
             id(temp_stop_sensor).publish_state(false);
           }
+      - script.execute: regulate
 
 text_sensor:
   - platform: wifi_info
@@ -304,6 +361,11 @@ display:
       const char* lvl_str[] = {"AUS", "25%", "50%", "75%", "100%"};
       auto lv_col = lv == 0 ? LGRAY : ORANGE;
       it.printf(10, 178, id(oswald_med), lv_col, "%s", lvl_str[lv]);
+      if (id(modus).current_option() == std::string("Automatik")) {
+        it.printf(170, 178, id(os_med), WHITE, "AUTO %.0f °C", id(ziel_temp).state);
+      } else {
+        it.printf(170, 182, id(os_small), LGRAY, "MANUELL");
+      }
 
       int bx[] = {9, 70, 131, 192, 253};
       const char* bl[] = {"0", "1/4", "1/2", "3/4", "1"};

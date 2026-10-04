@@ -42,6 +42,11 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
 - Seit v1.4.0 wird die Stufe gespeichert (`restore_value: yes`) und per `on_boot` wieder
   gesetzt. Das hat der Nutzer ausdrücklich so gewünscht: Der Heizstab soll nach Neustart
   oder Stromausfall von selbst weiterheizen.
+- Seit v1.5.0: `select` „Modus“ (Manuell/Automatik) und `number` „Zieltemperatur“.
+  Das Script `regulate` setzt die Stufe nach dem Rücklauf (Home-Assistant-Sensor über
+  `temp_entity`). Manuelle Eingaben laufen über `manual_level`, das zuerst auf Manuell
+  schaltet. Der Temperaturstopp (`temp_stop`) schaltet nur die PWM ab, die gewählte
+  Stufe bleibt erhalten. Grenzwerte stehen unter `substitutions`.
 - Versionierung nach SemVer in `esphome: project: version`. Bei jeder Änderung der Config
   die Version erhöhen.
 

@@ -149,6 +149,34 @@ verfügbar. Damit lässt sich der Heizstab per Dashboard, Automation oder Skript
 z. B. um PV-Überschuss zu nutzen. Eine Änderung am Display wird sofort an Home Assistant
 gemeldet und umgekehrt.
 
+### Automatik: Zieltemperatur halten (seit v1.5.0)
+
+Im **Modus „Automatik“** wählt das ESP die Stufe selbst, nach dem Abstand zwischen dem
+Rücklauf und der **Zieltemperatur** (25–50 °C):
+
+| Rücklauf unter Ziel | Stufe |
+|---|---|
+| 4 K oder mehr | 100 % |
+| 3 K | 75 % |
+| 2 K | 50 % |
+| 1 K | 25 % |
+| Ziel erreicht | 0 % |
+
+Die Regelung läuft auf dem ESP. Die Rücklauftemperatur kommt aus Home Assistant
+(`temp_entity` unter `substitutions`). Tippt man einen Touch-Button oder setzt die
+Leistung in Home Assistant, schaltet das ESP auf **„Manuell“** zurück.
+
+### Temperaturstopp (seit v1.5.0)
+
+Erreicht der Rücklauf **50 °C** (`max_temp`), schaltet das ESP das SSR ab, unabhängig
+von Modus und Stufe. Unter **45 °C** (`resume_temp`) heizt es weiter. In Home Assistant
+zeigt der Binary-Sensor **„Temperaturstopp“** den Zustand an, auf dem Display erscheint
+„TEMP-STOPP“.
+
+Wichtig: Stopp und Automatik hängen am Temperaturwert aus Home Assistant. Ohne Verbindung
+nutzt das ESP den zuletzt empfangenen Wert. **Thermostat und STB des MDC 230 bleiben die
+eigentliche Schutzebene**, den Thermostat am besten auf etwa 50–55 °C stellen.
+
 **Nach einem Neustart oder Stromausfall** stellt das ESP die zuletzt gewählte Stufe
 wieder her (seit v1.4.0). Der Heizstab heizt also von selbst weiter. Das setzt voraus, dass
 die Umwälzpumpe dauerhaft läuft. Thermostat und STB des MDC 230 bleiben die Schutzebene.

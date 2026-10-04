@@ -110,15 +110,27 @@ nicht nebenbei noch Bluetooth-Proxy spielen.
   28,9 °C → 27,9 °C, also ca. **3,5 K pro Stunde** bei ca. 9 K über Ausgangstemperatur.
 - Die Abkühlung verläuft exponentiell (Zeitkonstante grob 3 h). Über Nacht (8 h)
   wäre das Wasser praktisch wieder bei der Ausgangstemperatur von 19–20 °C.
-- **Wärmeverlust des Hauses**, geschätzt aus Aufheizen (+5,5 K/h bei 2,8 kW) und
-  Abkühlen (−3,5 K/h): ca. **1 kW** bei diesem Temperaturniveau.
-  → Um die Temperatur zu halten, liefe der Heizstab im Mittel etwa ein Drittel der
-  Zeit, also ca. **25 kWh pro Tag**: ca. 9 € mit Netzstrom (0,35 €/kWh) bzw. ca. 5 €
-  als Öl-Äquivalent (0,19 €/kWh Wärme).
-- **Vorbehalt:** Die Schätzung beruht auf 15 Minuten Abkühlung, nur dem
-  Rücklauffühler und einem Oktoberabend. Sie muss durch eine Messung über einen
-  ganzen Tag (Taktung des Thermostats, kWh auf L1) bestätigt werden. Bei
-  kälterem Wetter steigt der Bedarf deutlich.
+- **Wärmeabgabe des Heizkreises**, geschätzt aus Aufheizen (+5,5 K/h bei 2,8 kW) und
+  Abkühlen (−3,5 K/h): ca. **1 kW** bei knapp 30 °C Heizwasser.
+- **KORREKTUR:** Diese 1 kW sind **nicht** der Wärmebedarf des Hauses, sondern nur,
+  was das lauwarme Heizwasser abgibt. Das Wohnzimmer hatte 21,4 °C. Diese Wärme
+  stammt nicht aus 30 °C warmen Heizkörpern, sondern aus gespeicherter Wärme der
+  Mauern, Sonne und anderen Quellen.
+
+### Reicht der Heizstab für den Winter? (Einordnung mit Richtwerten)
+
+- Haus: Altbau, gering gedämmt, ca. **220 m²** Wohnfläche.
+- Temperaturen am 04.10. abends: außen 12,8 °C (Fühler unter der Terrasse, Schatten;
+  OpenWeatherMap 10,4 °C), innen Wohnzimmer 21,4 °C, Obergeschoss 19,3 °C.
+- Übliche Richtwerte für ungedämmte Altbauten (keine Messung!):
+  - Heizlast bei −12 °C ca. 100–150 W/m² → **22–33 kW** (Heizstab: 3 kW)
+  - Jahreswärmebedarf ca. 150–250 kWh/m² → **33.000–55.000 kWh/Jahr**
+    (Heizstab im Dauerbetrieb über ca. 200 Heiztage: max. ca. 14.000 kWh)
+- **Fazit:** Der 3-kW-Heizstab ersetzt die Ölheizung im Winter nicht. Sinnvoll ist er
+  für Grundwärme in der Übergangszeit, zum Verheizen von PV-Überschuss und zum
+  Frostschutz.
+- **Belastbarer machen:** bisheriger Ölverbrauch pro Jahr (Liter) → echter
+  Wärmebedarf (1 l ≈ 10 kWh × 85 % Kesselwirkungsgrad).
 
 ### Probleme und Erkenntnisse
 
@@ -142,7 +154,8 @@ nicht nebenbei noch Bluetooth-Proxy spielen.
 - [ ] Temperatur SSR-Kühlkörper unter Volllast prüfen
 - [ ] Fragen an den Heizungsbauer (Martin): Durchfluss/Pumpenstufe, Ölkessel
       absperren, Thermostat-Einstellung, Entlüften/Anlagendruck
+- [ ] Bisherigen Ölverbrauch pro Jahr erfragen (echter Wärmebedarf)
 - [ ] Tatsächliche Heizlast im Normalbetrieb messen (kWh pro Tag) und mit der
-      Abschätzung von ca. 25 kWh/Tag vergleichen; Außentemperatur dazu notieren
+      Außentemperatur (sensor.backdoor) und Innentemperatur dazu notieren
 - [ ] Automation „Heizstab nur bei PV-Überschuss“
 - [ ] Eigenen Strompreis und Einspeisevergütung eintragen

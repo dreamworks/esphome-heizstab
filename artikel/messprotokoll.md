@@ -132,6 +132,24 @@ nicht nebenbei noch Bluetooth-Proxy spielen.
 - **Belastbarer machen:** bisheriger Ölverbrauch pro Jahr (Liter) → echter
   Wärmebedarf (1 l ≈ 10 kWh × 85 % Kesselwirkungsgrad).
 
+### Messaufbau ab 04.10., 22:36
+
+Home-Assistant-Hilfssensoren für die Langzeitmessung:
+
+| Entity | Bedeutung |
+|---|---|
+| `sensor.heizstab_leistung_gemessen` | Leistung L1 minus 450 W Grundlast, nur wenn L1 > 2 kW (sonst 0) |
+| `sensor.heizstab_energie` | Riemann-Integral (links) daraus, kWh gesamt |
+| `sensor.heizstab_energie_taglich` | Tageszähler, Reset um 0 Uhr |
+| `sensor.backdoor` | Außentemperatur (Fühler unter der Terrasse, Schatten) |
+| `sensor.wohnzimmer_essbereich`, `sensor.oben_indoor` | Innentemperatur EG/OG |
+
+Einschränkung: Laufen andere Verbraucher über 2 kW auf L1 (Wasserkocher, Backofen),
+werden sie mitgezählt; die Grundlast schwankt zwischen ca. 400 und 600 W.
+
+Firmware v1.4.0 (per OTA aufgespielt, erstmals erfolgreich): Die Stufe wird nach einem
+Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

@@ -30,8 +30,11 @@ Seit v1.3.0 ohne Bluetooth (siehe unten). Das Repo ist **öffentlich**.
 
 ## Config-Konventionen
 
-- **Das Repo ist unabhängig von einer bestimmten Installation.** Keine privaten Gerätenamen,
-  Entity-IDs, IPs, MAC-Adressen oder Messdaten in Repo-Dateien. Installationsspezifisches
+- **Inhalt des Repos:** die Heizstab-Config und das Material für den Bürgerblick-Artikel
+  (`artikel/messprotokoll.md`). **Nicht ins Repo** gehören die konkrete Anbindung an den
+  Home Assistant des Nutzers: Helfer, Automationen, Dashboards, Sensor-Aufräumen.
+- **Die Config ist unabhängig von einer bestimmten Installation.** Keine privaten
+  Gerätenamen, Entity-IDs, IPs oder MAC-Adressen in `heizstab.yaml`. Installationsspezifisches
   steht als Platzhalter unter `substitutions`. Der Nutzer überschreibt die Werte in seiner
   lokalen Dashboard-Datei, die `heizstab.yaml` als GitHub-Package einbindet (siehe README).
 

@@ -187,6 +187,18 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 - Akku leer (5,9 %), der Heizstab läuft morgens mit ca. 3,2 kW Netzbezug.
 - Homematic IP: Der WLAN-Access-Point (HmIP-WLAN-HAP) hat seit dem 05.10. früh keine stabile
   Verbindung mehr, die Heizgruppen liefern keine Werte.
+- **Tagsüber:** wolkenlos, außen bis ca. 22 °C. Ab ca. 10:30 läuft der Heizstab komplett mit
+  PV (12:04: PV 5,35 kW, Heizstab 2,9 kW, Akku lädt mit 1,9 kW, Netz 0).
+- **E-Auto:** lädt ab 13:25 durchgehend mit ca. 3,55 kW (einphasig, L2), bis 19:10 gut 20 kWh.
+  Dadurch floss der PV-Überschuss ins Auto statt in den Akku, und der Akku war schon um 19:04
+  leer (Prognose ohne Auto: voll gegen 17 Uhr, reicht bis ca. 21 Uhr).
+- **Temperatur gehalten:** Ab ca. 16 Uhr schaltet der Thermostat des Heizstabs ihn immer wieder
+  für 10–20 min ab, die eingestellte Temperatur ist erreicht. **~19:15: Vorlauf 50 °C**
+  (Handablesung). Um 50 °C Vorlauf zu halten, brauchte der Heizstab von 16 bis 19 Uhr
+  **im Mittel ca. 1,2 kW** (0,87 / 1,75 / 1,09 kWh pro Stunde), bei außen ca. 19–22 °C,
+  mit geschlossenen Ventilen in Küche und Hannah.
+- 19:12: Wohnzimmer 22,5 °C, OG 21,1 °C (früh 19,2 °C), Küche 22,2 °C, Hannah 20,6 °C.
+  Heizstab-Energie bis 19:11: 35,0 kWh.
 
 ### Probleme und Erkenntnisse
 

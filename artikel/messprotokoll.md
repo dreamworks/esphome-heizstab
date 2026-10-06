@@ -163,6 +163,30 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 - Nebenbefund: Die DDNS-Adresse war seit der nächtlichen Zwangstrennung nicht aktualisiert
   (alte IP), daher kein Fernzugriff bis ca. 13:40. Home Assistant hat trotzdem lückenlos aufgezeichnet.
 - **13:44: Test mit 25 % (ca. 0,7 kW im Mittel)** gestartet. Das Takten ist im L1-Verlauf sichtbar.
+- **25 % reichen nicht:** Der Rücklauf fiel bis 19:25 von ca. 33,7 °C auf 25,7 °C (Stundenmittel,
+  gut 1 K pro Stunde). Danach 19:45 auf 75 %, ab 20:07 wieder 100 %.
+- **Umwälzpumpe** seit ca. 20:00 an einem Shelly Plug M Gen3: Leistung konstant ca. 35 W.
+- **Hydraulik geklärt:** Hinter dem Ölkessel sitzt ein 4-Wege-Mischer, der Kessel wird nicht
+  durchströmt. Der Heizstab sitzt im inneren Heizkreis, im Rücklauf von den Heizkörpern zum
+  Mischer. Der Rücklauffühler sitzt vor dem Heizstab, der Vorlauffühler dahinter.
+- **Heizkörperventile:** Zwei alte Homematic-Thermostate (Küche, Hannah) meldeten 0 %
+  Ventilöffnung, die Heizkörper waren aber warm, also offen. Küche: Batterien getauscht und neu
+  angelernt, danach kalt (06.10. früh geprüft). Hannah: auf „Aus“ gestellt, Raum von 21,6 °C
+  auf 19,3 °C (06.10. 07:50), Batterien werden getauscht. Bis dahin waren die Messungen
+  „mit unkontrollierten Heizkörpern“.
+- **Temperatur-ESP (Vor-/Rücklauf):** Beim Reparieren des Vorlauffühlers beschädigt, seit
+  20:04 keine Wasser-Temperaturen. Ersatz: Wemos D1 mini mit DS18B20-Adapter-Modulen.
+- **Tagesbilanz 05.10.:** **50,6 kWh** Heizstab, außen Mittel 14,0 °C (min 8,9 / max 20,9 °C).
+
+## 2026-10-06 – Zweite Nacht
+
+- Heizstab die ganze Nacht auf 100 %. **Energie 0–07:50 Uhr: 10,8 kWh**, also Dauerlauf.
+- Außen: Tiefstwert der bisherigen Messung, ca. 9 °C (07:50: 8,8 °C).
+- 07:50: Wohnzimmer 21,6 °C, OG 19,2 °C, Hannah 19,3 °C (Ventil zu), Küche 26,9 °C (Heizkörper kalt).
+- **07:50: Vorlauf 40 °C**, von Hand am Thermometer an der Heizung abgelesen (Temperatur-ESP defekt).
+- Akku leer (5,9 %), der Heizstab läuft morgens mit ca. 3,2 kW Netzbezug.
+- Homematic IP: Der WLAN-Access-Point (HmIP-WLAN-HAP) hat seit dem 05.10. früh keine stabile
+  Verbindung mehr, die Heizgruppen liefern keine Werte.
 
 ### Probleme und Erkenntnisse
 

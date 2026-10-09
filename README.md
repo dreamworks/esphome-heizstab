@@ -75,9 +75,21 @@ Die Config ist für das **ESPHome-Dashboard in Home Assistant** (ESPHome-Add-on)
 2. Im Dashboard oben rechts unter **Secrets** prüfen, dass `wifi_ssid` und `wifi_password`
    eingetragen sind. Weitere Secrets braucht die Config nicht (Vorlage:
    [secrets.yaml.example](secrets.yaml.example)).
-3. **Neues Gerät** anlegen, oder ein bestehendes öffnen, und den Inhalt von
-   [heizstab.yaml](heizstab.yaml) komplett in den Editor kopieren. Unter `esphome:` ggf.
-   `name` und `friendly_name` anpassen.
+3. **Neues Gerät** anlegen, oder ein bestehendes öffnen, und als Inhalt nur diese
+   Zeilen eintragen. Die eigentliche Config wird direkt aus diesem Repo geladen, eigene
+   Werte stehen nur in der lokalen Datei:
+   ```yaml
+   substitutions:
+     device_name: heizstab          # Gerätename im Netz
+     friendly_name: ESP Heizstab    # Anzeigename in Home Assistant
+
+   packages:
+     heizstab: github://dreamworks/esphome-heizstab/heizstab.yaml@main
+   ```
+   Mit `@main` holt sich das Dashboard bei jedem Kompilieren den aktuellen Stand. Wer eine
+   feste Version will, verweist auf einen Commit oder ein Tag. Wer ein bestehendes Gerät
+   umstellt, muss `device_name` auf dessen bisherigen Namen setzen, damit Home Assistant es
+   wiedererkennt.
 4. **Install → Plug into this computer:** Den ersten Flash per USB durchführen. Spätere
    Updates gehen per OTA („Wirelessly“). Wenn ein OTA-Update fehlschlägt, wieder per USB
    flashen (siehe [Bekannte Eigenheiten](#bekannte-eigenheiten-des-cyd)).

@@ -150,6 +150,94 @@ werden sie mitgezählt; die Grundlast schwankt zwischen ca. 400 und 600 W.
 Firmware v1.4.0 (per OTA aufgespielt, erstmals erfolgreich): Die Stufe wird nach einem
 Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 
+## 2026-10-05 – Erste Nacht im Dauerbetrieb
+
+- Heizstab durchgehend auf 100 % von 22:36 bis 13:44.
+- **Energie 0–13:42 Uhr: 35,7 kWh** (Tageszähler), im Mittel 2,6 kW, also praktisch Dauerlauf.
+- **Rücklauf (Stundenmaxima):** 23 Uhr 30,3 °C → 0 Uhr 34,9 → 2 Uhr 42,1 → **4–5 Uhr 43,0 °C (Höchstwert)**
+  → 5–6 Uhr Abfall auf 31,4 °C → ab 8 Uhr 31–33 °C.
+- Vermutung: Nachtabsenkung der Heizkörper-Thermostatköpfe. Nachts sind die Ventile zu,
+  wenig Durchfluss, der Rücklauf steigt. Gegen 5 Uhr öffnen sie, kaltes Wasser kommt zurück.
+  Der plötzliche Abfall am 04.10. um 23:28 passt ins selbe Muster. Noch zu bestätigen.
+- 13:42: Wohnzimmer 22,8 °C, OG 20,1 °C, außen 18,8 °C, PV 3,3 kW (Heizstab läuft teils mit Sonnenstrom).
+- Nebenbefund: Die DDNS-Adresse war seit der nächtlichen Zwangstrennung nicht aktualisiert
+  (alte IP), daher kein Fernzugriff bis ca. 13:40. Home Assistant hat trotzdem lückenlos aufgezeichnet.
+- **13:44: Test mit 25 % (ca. 0,7 kW im Mittel)** gestartet. Das Takten ist im L1-Verlauf sichtbar.
+- **25 % reichen nicht:** Der Rücklauf fiel bis 19:25 von ca. 33,7 °C auf 25,7 °C (Stundenmittel,
+  gut 1 K pro Stunde). Danach 19:45 auf 75 %, ab 20:07 wieder 100 %.
+- **Umwälzpumpe** seit ca. 20:00 an einem Shelly Plug M Gen3: Leistung konstant ca. 35 W.
+- **Hydraulik geklärt:** Hinter dem Ölkessel sitzt ein 4-Wege-Mischer, der Kessel wird nicht
+  durchströmt. Der Heizstab sitzt im inneren Heizkreis, im Rücklauf von den Heizkörpern zum
+  Mischer. Der Rücklauffühler sitzt vor dem Heizstab, der Vorlauffühler dahinter.
+- **Heizkörperventile:** Zwei alte Homematic-Thermostate (Küche, Hannah) meldeten 0 %
+  Ventilöffnung, die Heizkörper waren aber warm, also offen. Küche: Batterien getauscht und neu
+  angelernt, danach kalt (06.10. früh geprüft). Hannah: auf „Aus“ gestellt, Raum von 21,6 °C
+  auf 19,3 °C (06.10. 07:50), Batterien werden getauscht. Bis dahin waren die Messungen
+  „mit unkontrollierten Heizkörpern“.
+- **Temperatur-ESP (Vor-/Rücklauf):** Beim Reparieren des Vorlauffühlers beschädigt, seit
+  20:04 keine Wasser-Temperaturen. Ersatz: Wemos D1 mini mit DS18B20-Adapter-Modulen.
+- **Tagesbilanz 05.10.:** **50,6 kWh** Heizstab, außen Mittel 14,0 °C (min 8,9 / max 20,9 °C).
+
+## 2026-10-06 – Zweite Nacht
+
+- Heizstab die ganze Nacht auf 100 %. **Energie 0–07:50 Uhr: 10,8 kWh**, also Dauerlauf.
+- Außen: Tiefstwert der bisherigen Messung, ca. 9 °C (07:50: 8,8 °C).
+- 07:50: Wohnzimmer 21,6 °C, OG 19,2 °C, Hannah 19,3 °C (Ventil zu), Küche 26,9 °C (Heizkörper kalt).
+- **07:50: Vorlauf 40 °C**, von Hand am Thermometer an der Heizung abgelesen (Temperatur-ESP defekt).
+- Akku leer (5,9 %), der Heizstab läuft morgens mit ca. 3,2 kW Netzbezug.
+- Homematic IP: Der WLAN-Access-Point (HmIP-WLAN-HAP) hat seit dem 05.10. früh keine stabile
+  Verbindung mehr, die Heizgruppen liefern keine Werte.
+- **Tagsüber:** wolkenlos, außen bis ca. 22 °C. Ab ca. 10:30 läuft der Heizstab komplett mit
+  PV (12:04: PV 5,35 kW, Heizstab 2,9 kW, Akku lädt mit 1,9 kW, Netz 0).
+- **E-Auto:** lädt ab 13:25 durchgehend mit ca. 3,55 kW (einphasig, L2), bis 19:10 gut 20 kWh.
+  Dadurch floss der PV-Überschuss ins Auto statt in den Akku, und der Akku war schon um 19:04
+  leer (Prognose ohne Auto: voll gegen 17 Uhr, reicht bis ca. 21 Uhr).
+- **Temperatur gehalten:** Ab ca. 16 Uhr schaltet der Thermostat des Heizstabs ihn immer wieder
+  für 10–20 min ab, die eingestellte Temperatur ist erreicht. **~19:15: Vorlauf 50 °C**
+  (Handablesung). Um 50 °C Vorlauf zu halten, brauchte der Heizstab von 16 bis 19 Uhr
+  **im Mittel ca. 1,2 kW** (0,87 / 1,75 / 1,09 kWh pro Stunde), bei außen ca. 19–22 °C,
+  mit geschlossenen Ventilen in Küche und Hannah.
+- 19:12: Wohnzimmer 22,5 °C, OG 21,1 °C (früh 19,2 °C), Küche 22,2 °C, Hannah 20,6 °C.
+  Heizstab-Energie bis 19:11: 35,0 kWh.
+- **Abend 06.10.:** Drehregler am Heizstab auf „3 von 5“, alle Heizkörper zu außer dem Bad
+  (entlüftet). Vorlauf ca. 20 Uhr: **40 °C** (Handablesung). Mit allen Heizkörpern zu stand das
+  Wasser fast still (Heizstab nur 40–50 s an), erst mit offenem Bad längere An-Phasen.
+  Heizstab-Energie: 21–22 Uhr 0,64 kWh, **22–23 Uhr 0,19 kWh**, 23–24 Uhr 1,66 kWh
+  (Heizkörper Klavierzimmer kurz geöffnet, wurde nicht richtig warm).
+- 4-Wege-Mischer: keine Steuerung, steht am Anschlag, Ölkessel nicht durchströmt.
+- 00:26 (07.10.): Umwälzpumpe Wilo Star-RS 30/4 von Stufe Mitte (gemessen 35–38 W) auf
+  max (52,6 W).
+- Korrektur zur Nacht 05./06.10.: Der Heizstab lief **nicht** durchgehend. 20–24 Uhr
+  Dauerlauf (je ca. 2,65 kWh), 0–5 Uhr Takten (0,2–1,7 kWh/h), 5–8 Uhr wieder Volllast.
+  20–8 Uhr gesamt 21,9 kWh.
+
+## Tagesbilanz 04.–09.10.
+
+Energie aus Home Assistant (Tageszähler Heizstab, Wechselrichter). Netzanteil des Heizstabs
+geschätzt: Netzbezug des Tages minus ca. 3 kWh Grundbedarf ohne Heizstab (am 06.10. das
+E-Auto separat herausgerechnet). Preise angenommen: Netzstrom 0,35 €/kWh, PV-Strom mit
+entgangener Einspeisevergütung 0,08 €/kWh.
+
+| Tag | Heizstab | davon Netz | davon PV/Akku | Kosten | Außen Ø (min–max) | WZ Ø | OG Ø |
+|---|---|---|---|---|---|---|---|
+| 04.10. ab 18 Uhr | 10,6 kWh | 3,7 | 7,0 | 1,84 € | 15,3 (11–22) | 21,2 | 19,2 |
+| 05.10. | 50,6 kWh | 35,1 | 15,5 | 13,51 € | 14,0 (8,9–20,9) | 21,9 | 19,7 |
+| 06.10. | 39,2 kWh | 14,5 | 24,7 | 7,05 € | 14,7 (8,6–22,6) | 22,3 | 20,1 |
+| 07.10. | 26,3 kWh | 13,6 | 12,7 | 5,78 € | 14,6 (9,0–21,8) | 22,3 | 20,6 |
+| 08.10. | 27,7 kWh | 18,5 | 9,1 | 7,22 € | 14,9 (11,6–20,6) | 21,8 | 20,9 |
+| 09.10. bis 11:23 | 18,6 kWh | 18,6 | 0 | 6,51 € | 10,3 (8,4–12,0) | 21,4 | 21,1 |
+| **Summe** | **172,9 kWh** | **104,0** | **68,9** | **41,90 €** | | | |
+
+- Öl-Äquivalent für dieselbe Wärme: ca. 20 l Heizöl (85 % Wirkungsgrad), ca. **33,40 €**.
+- PV-Erzeugung: 42,7 / 39,6 / 42,1 / 39,5 / 20,1 kWh (04.–08.10.). Eingespeist wurden trotzdem
+  8,1 kWh (05.10.) und **15,2 kWh (07.10.)**: Sonnenstrom ging ins Netz, während der Heizstab
+  nachts mit Netzstrom lief. Genau hier setzt die geplante PV-Automation an.
+- Umwälzpumpe: 0,9–1,3 kWh pro Tag (ca. 0,30–0,47 €).
+- Seit 07.10. pendelt der Heizstab bei 26–28 kWh/Tag, die Räume bleiben dabei warm
+  (OG im Tagesmittel von 19,2 auf 21,1 °C gestiegen).
+- 09.10. ca. 11:15: Drehregler am Heizstab auf **max** (ca. 75 °C), um die Höchsttemperatur zu
+  testen.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

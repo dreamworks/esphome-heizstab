@@ -199,6 +199,44 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
   mit geschlossenen Ventilen in Küche und Hannah.
 - 19:12: Wohnzimmer 22,5 °C, OG 21,1 °C (früh 19,2 °C), Küche 22,2 °C, Hannah 20,6 °C.
   Heizstab-Energie bis 19:11: 35,0 kWh.
+- **Abend 06.10.:** Drehregler am Heizstab auf „3 von 5“, alle Heizkörper zu außer dem Bad
+  (entlüftet). Vorlauf ca. 20 Uhr: **40 °C** (Handablesung). Mit allen Heizkörpern zu stand das
+  Wasser fast still (Heizstab nur 40–50 s an), erst mit offenem Bad längere An-Phasen.
+  Heizstab-Energie: 21–22 Uhr 0,64 kWh, **22–23 Uhr 0,19 kWh**, 23–24 Uhr 1,66 kWh
+  (Heizkörper Klavierzimmer kurz geöffnet, wurde nicht richtig warm).
+- 4-Wege-Mischer: keine Steuerung, steht am Anschlag, Ölkessel nicht durchströmt.
+- 00:26 (07.10.): Umwälzpumpe Wilo Star-RS 30/4 von Stufe Mitte (gemessen 35–38 W) auf
+  max (52,6 W).
+- Korrektur zur Nacht 05./06.10.: Der Heizstab lief **nicht** durchgehend. 20–24 Uhr
+  Dauerlauf (je ca. 2,65 kWh), 0–5 Uhr Takten (0,2–1,7 kWh/h), 5–8 Uhr wieder Volllast.
+  20–8 Uhr gesamt 21,9 kWh.
+
+## Tagesbilanz 04.–09.10.
+
+Energie aus Home Assistant (Tageszähler Heizstab, Wechselrichter). Netzanteil des Heizstabs
+geschätzt: Netzbezug des Tages minus ca. 3 kWh Grundbedarf ohne Heizstab (am 06.10. das
+E-Auto separat herausgerechnet). Preise angenommen: Netzstrom 0,35 €/kWh, PV-Strom mit
+entgangener Einspeisevergütung 0,08 €/kWh.
+
+| Tag | Heizstab | davon Netz | davon PV/Akku | Kosten | Außen Ø (min–max) | WZ Ø | OG Ø |
+|---|---|---|---|---|---|---|---|
+| 04.10. ab 18 Uhr | 10,6 kWh | 3,7 | 7,0 | 1,84 € | 15,3 (11–22) | 21,2 | 19,2 |
+| 05.10. | 50,6 kWh | 35,1 | 15,5 | 13,51 € | 14,0 (8,9–20,9) | 21,9 | 19,7 |
+| 06.10. | 39,2 kWh | 14,5 | 24,7 | 7,05 € | 14,7 (8,6–22,6) | 22,3 | 20,1 |
+| 07.10. | 26,3 kWh | 13,6 | 12,7 | 5,78 € | 14,6 (9,0–21,8) | 22,3 | 20,6 |
+| 08.10. | 27,7 kWh | 18,5 | 9,1 | 7,22 € | 14,9 (11,6–20,6) | 21,8 | 20,9 |
+| 09.10. bis 11:23 | 18,6 kWh | 18,6 | 0 | 6,51 € | 10,3 (8,4–12,0) | 21,4 | 21,1 |
+| **Summe** | **172,9 kWh** | **104,0** | **68,9** | **41,90 €** | | | |
+
+- Öl-Äquivalent für dieselbe Wärme: ca. 20 l Heizöl (85 % Wirkungsgrad), ca. **33,40 €**.
+- PV-Erzeugung: 42,7 / 39,6 / 42,1 / 39,5 / 20,1 kWh (04.–08.10.). Eingespeist wurden trotzdem
+  8,1 kWh (05.10.) und **15,2 kWh (07.10.)**: Sonnenstrom ging ins Netz, während der Heizstab
+  nachts mit Netzstrom lief. Genau hier setzt die geplante PV-Automation an.
+- Umwälzpumpe: 0,9–1,3 kWh pro Tag (ca. 0,30–0,47 €).
+- Seit 07.10. pendelt der Heizstab bei 26–28 kWh/Tag, die Räume bleiben dabei warm
+  (OG im Tagesmittel von 19,2 auf 21,1 °C gestiegen).
+- 09.10. ca. 11:15: Drehregler am Heizstab auf **max** (ca. 75 °C), um die Höchsttemperatur zu
+  testen.
 
 ### Probleme und Erkenntnisse
 

@@ -240,7 +240,7 @@ entgangener Einspeisevergütung 0,08 €/kWh.
 
 ## 09./10.10. – Test „Drehregler max“ und zurück
 
-- 09.10.: Mittags mit PV-Überschuss bis **ca. 70 °C Vorlauf** (Handablesung). Erstes Takten
+- 09.10.: Mittags mit PV-Überschuss ca. 70 °C, später **75 °C Vorlauf** (Handablesung, Maximum des Thermostats). Erstes Takten
   des Thermostats 12:25–12:32. Akku dabei trotzdem bis 77 % geladen (PV 5–6 kW).
 - Ab 09.10. ca. 13:40: **alle Heizkörper-Thermostate manuell auf 19 °C** (Homematic, Homematic
   IP, Gästezimmer). Homematic IP wieder online; Thermostate in Wohnzimmer und Büro Michael
@@ -252,7 +252,7 @@ entgangener Einspeisevergütung 0,08 €/kWh.
   Zurückdrehen (ca. 22 Uhr) 22–6 Uhr nur **ca. 1,3 kWh/h** (zusammen 10,3 kWh), Räume blieben
   warm. Niedrigere Vorlauftemperatur spart hier rund 40 %.
 - **Kalibrierung Drehregler** (Vorlauf am Thermometer): Stufe 2 → **38 °C** (10.10. früh),
-  Stufe 3 → ca. 40 °C (06.10., ungenau wegen kaum Durchfluss), max → ca. 70 °C (09.10.).
+  Stufe 3 → ca. 40 °C (06.10., ungenau wegen kaum Durchfluss), max → **75 °C** (09.10.).
 - 10.10. 06:24: außen 12,2 °C, Wohnzimmer 20,9 °C, OG 22,4 °C, Küche 20,7 °C; Akku leer.
 
 ### Probleme und Erkenntnisse

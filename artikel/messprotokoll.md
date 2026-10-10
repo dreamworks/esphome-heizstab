@@ -238,6 +238,23 @@ entgangener Einspeisevergütung 0,08 €/kWh.
 - 09.10. ca. 11:15: Drehregler am Heizstab auf **max** (ca. 75 °C), um die Höchsttemperatur zu
   testen.
 
+## 09./10.10. – Test „Drehregler max“ und zurück
+
+- 09.10.: Mittags mit PV-Überschuss bis **ca. 70 °C Vorlauf** (Handablesung). Erstes Takten
+  des Thermostats 12:25–12:32. Akku dabei trotzdem bis 77 % geladen (PV 5–6 kW).
+- Ab 09.10. ca. 13:40: **alle Heizkörper-Thermostate manuell auf 19 °C** (Homematic, Homematic
+  IP, Gästezimmer). Homematic IP wieder online; Thermostate in Wohnzimmer und Büro Michael
+  melden „Gruppenmitglied nicht erreichbar“ (Batterie/Reichweite).
+- Anlagendruck nur noch **0,5 bar** (zu niedrig, Nachfüllen nötig). Vermutlich deshalb wurde
+  der Heizkörper im Klavierzimmer (OG) nicht warm.
+- **Tagesbilanz 09.10.: 45,5 kWh** Heizstab, außen Ø 12,2 °C (min 8,4 °C).
+- **Vergleich Drehregler:** 16–22 Uhr auf max im Mittel **ca. 2,2 kWh/h**, nach dem
+  Zurückdrehen (ca. 22 Uhr) 22–6 Uhr nur **ca. 1,3 kWh/h** (zusammen 10,3 kWh), Räume blieben
+  warm. Niedrigere Vorlauftemperatur spart hier rund 40 %.
+- **Kalibrierung Drehregler** (Vorlauf am Thermometer): Stufe 2 → **38 °C** (10.10. früh),
+  Stufe 3 → ca. 40 °C (06.10., ungenau wegen kaum Durchfluss), max → ca. 70 °C (09.10.).
+- 10.10. 06:24: außen 12,2 °C, Wohnzimmer 20,9 °C, OG 22,4 °C, Küche 20,7 °C; Akku leer.
+
 ### Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein

@@ -169,9 +169,9 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 - **Hydraulik geklärt:** Hinter dem Ölkessel sitzt ein 4-Wege-Mischer, der Kessel wird nicht
   durchströmt. Der Heizstab sitzt im inneren Heizkreis, im Rücklauf von den Heizkörpern zum
   Mischer. Der Rücklauffühler sitzt vor dem Heizstab, der Vorlauffühler dahinter.
-- **Heizkörperventile:** Zwei alte Homematic-Thermostate (Küche, Hannah) meldeten 0 %
+- **Heizkörperventile:** Zwei alte Homematic-Thermostate (Küche, Kinderzimmer) meldeten 0 %
   Ventilöffnung, die Heizkörper waren aber warm, also offen. Küche: Batterien getauscht und neu
-  angelernt, danach kalt (06.10. früh geprüft). Hannah: auf „Aus“ gestellt, Raum von 21,6 °C
+  angelernt, danach kalt (06.10. früh geprüft). Kinderzimmer: auf „Aus“ gestellt, Raum von 21,6 °C
   auf 19,3 °C (06.10. 07:50), Batterien werden getauscht. Bis dahin waren die Messungen
   „mit unkontrollierten Heizkörpern“.
 - **Temperatur-ESP (Vor-/Rücklauf):** Beim Reparieren des Vorlauffühlers beschädigt, seit
@@ -182,7 +182,7 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
 
 - Heizstab die ganze Nacht auf 100 %. **Energie 0–07:50 Uhr: 10,8 kWh**, also Dauerlauf.
 - Außen: Tiefstwert der bisherigen Messung, ca. 9 °C (07:50: 8,8 °C).
-- 07:50: Wohnzimmer 21,6 °C, OG 19,2 °C, Hannah 19,3 °C (Ventil zu), Küche 26,9 °C (Heizkörper kalt).
+- 07:50: Wohnzimmer 21,6 °C, OG 19,2 °C, Kinderzimmer 19,3 °C (Ventil zu), Küche 26,9 °C (Heizkörper kalt).
 - **07:50: Vorlauf 40 °C**, von Hand am Thermometer an der Heizung abgelesen (Temperatur-ESP defekt).
 - Akku leer (5,9 %), der Heizstab läuft morgens mit ca. 3,2 kW Netzbezug.
 - Homematic IP: Der WLAN-Access-Point (HmIP-WLAN-HAP) hat seit dem 05.10. früh keine stabile
@@ -196,8 +196,8 @@ Neustart wiederhergestellt. Heizstab seit 22:36 wieder auf 100 %.
   für 10–20 min ab, die eingestellte Temperatur ist erreicht. **~19:15: Vorlauf 50 °C**
   (Handablesung). Um 50 °C Vorlauf zu halten, brauchte der Heizstab von 16 bis 19 Uhr
   **im Mittel ca. 1,2 kW** (0,87 / 1,75 / 1,09 kWh pro Stunde), bei außen ca. 19–22 °C,
-  mit geschlossenen Ventilen in Küche und Hannah.
-- 19:12: Wohnzimmer 22,5 °C, OG 21,1 °C (früh 19,2 °C), Küche 22,2 °C, Hannah 20,6 °C.
+  mit geschlossenen Ventilen in Küche und Kinderzimmer.
+- 19:12: Wohnzimmer 22,5 °C, OG 21,1 °C (früh 19,2 °C), Küche 22,2 °C, Kinderzimmer 20,6 °C.
   Heizstab-Energie bis 19:11: 35,0 kWh.
 - **Abend 06.10.:** Drehregler am Heizstab auf „3 von 5“, alle Heizkörper zu außer dem Bad
   (entlüftet). Vorlauf ca. 20 Uhr: **40 °C** (Handablesung). Mit allen Heizkörpern zu stand das
@@ -238,7 +238,83 @@ entgangener Einspeisevergütung 0,08 €/kWh.
 - 09.10. ca. 11:15: Drehregler am Heizstab auf **max** (ca. 75 °C), um die Höchsttemperatur zu
   testen.
 
-### Probleme und Erkenntnisse
+## 09./10.10. – Test „Drehregler max“ und zurück
+
+- 09.10.: Mittags mit PV-Überschuss ca. 70 °C, später **75 °C Vorlauf** (Handablesung, Maximum des Thermostats). Erstes Takten
+  des Thermostats 12:25–12:32. Akku dabei trotzdem bis 77 % geladen (PV 5–6 kW).
+- Ab 09.10. ca. 13:40: **alle Heizkörper-Thermostate manuell auf 19 °C** (Homematic, Homematic
+  IP, Gästezimmer). Homematic IP wieder online; Thermostate in Wohnzimmer und Büro
+  melden „Gruppenmitglied nicht erreichbar“ (Batterie/Reichweite).
+- Anlagendruck nur noch **0,5 bar** (zu niedrig, Nachfüllen nötig). Vermutlich deshalb wurde
+  der Heizkörper im Klavierzimmer (OG) nicht warm.
+- **Tagesbilanz 09.10.: 45,5 kWh** Heizstab, außen Ø 12,2 °C (min 8,4 °C).
+- **Vergleich Drehregler:** 16–22 Uhr auf max im Mittel **ca. 2,2 kWh/h**, nach dem
+  Zurückdrehen (ca. 22 Uhr) 22–6 Uhr nur **ca. 1,3 kWh/h** (zusammen 10,3 kWh), Räume blieben
+  warm. Niedrigere Vorlauftemperatur spart hier rund 40 %.
+- **Kalibrierung Drehregler** (Vorlauf am Thermometer): Stufe 2 → **38 °C** (10.10. früh),
+  Stufe 3 → ca. 40 °C (06.10., ungenau wegen kaum Durchfluss), max → **75 °C** (09.10.).
+- 10.10. 06:24: außen 12,2 °C, Wohnzimmer 20,9 °C, OG 22,4 °C, Küche 20,7 °C; Akku leer.
+
+## 10./11.10.
+
+- 10.10.: kaum Sonne (PV nur 6,7 kWh), der Heizstab läuft fast nur mit Netzstrom.
+- Nacht 10./11.10.: **10,1 kWh von 0 bis 7 Uhr** (im Mittel 1,4 kW, der Thermostat taktet),
+  außen 8,1–8,7 °C.
+- 11.10. abends: Heizstab auf 100 %, 2,6 kW auf L1. Die Umwälzpumpe hängt ebenfalls an L1.
+
+## 12./13.10. – Kälteste Nacht bisher
+
+- 12.10.: **Anlagendruck auf 1,5 bar nachgefüllt** (vorher 0,5 bar).
+- Elektriker vor Ort, Wochendaten übergeben. Offene Punkte für ihn: Erstprüfung (Schutzleiter,
+  Isolation, FI-Auslösetest), Leitung und Absicherung für ca. 12 A Dauerlast,
+  SSR-Kühlkörper unter Volllast. Phasenverteilung: L1 trägt Heizstab und weitere Verbraucher
+  (Spitze der Woche 6,1 kW), L3 ist fast unbelastet. Vorschlag: Heizstab auf L3 umlegen.
+- Ca. 16:41: Home Assistant und die Integrationen starten neu. **Der Heizstab stellt sich von
+  selbst wieder auf 100 %** (Wiederherstellung der Stufe seit v1.4.0, damit erstmals im Betrieb
+  bestätigt).
+- Abends lädt das E-Auto mit ca. 3,6 kW auf L2, bis in die Nacht. Um 19 Uhr 8,5 kW Netzbezug
+  (Heizstab, Küche, Auto), Akku leer, keine PV.
+- **Thermostate messen am Heizkörper:** Die alten Homematic-Thermostate (Küche, Keller,
+  Kinderzimmer) messen direkt am Heizkörper und schließen bei 19 °C Soll zu früh. Keller:
+  Thermostat 21,3–22,8 °C, Raumsensor im Keller (anderer Raum, Hintereingang) 16,7 °C.
+  Bei Soll 23 °C geht das Ventil von 0 auf 99 % auf, der Heizkörper wird warm. Bei Soll 21 °C
+  drosselt es wieder auf 13 %. Neu eingestellt: Küche 21 °C, Keller 24 °C (Maximum).
+  Ein Offset am Thermostat reicht nicht (max. −3,5 K). Abhilfe wäre ein Raumfühler.
+- **Nacht 12./13.10.:** Heizstab durchgehend auf 100 %, **0–7:15 Uhr 18,1 kWh** (im Mittel
+  2,5 kW, praktisch Dauerlauf). Außen **min. 2,3 °C**.
+- Trotz Dauerlauf kühlt das Haus ab: EG 20,7 → 20,0 °C, **OG 20,1 → 19,1 °C**,
+  Keller 16,6 → 16,1 °C (0:15 → 7:15 Uhr).
+- **Ergebnis:** Bei Außentemperaturen um 2–5 °C reicht der 3-kW-Heizstab allein nicht mehr,
+  um das Haus zu halten. Die Grenze liegt nach diesen Messungen bei etwa 5–8 °C Außentemperatur
+  (Tagesmittel).
+
+## Tagesbilanz 10.–12.10.
+
+Netz- und PV-Anteil des Heizstabs hier **anteilig geschätzt**: PV-Anteil am gesamten
+Hausverbrauch des Tages, auf den Heizstab übertragen (das E-Auto am 12.10. macht die bisherige
+Methode unbrauchbar). Preise wie oben.
+
+| Tag | Heizstab | davon Netz | davon PV/Akku | Kosten | Außen Ø (min–max) | WZ Ø | OG Ø |
+|---|---|---|---|---|---|---|---|
+| 10.10. | 32,9 kWh | 28,6 | 4,3 | 10,35 € | 12,1 (9,1–13,4) | 21,6 | 21,7 |
+| 11.10. | 44,4 kWh | 27,4 | 17,0 | 10,95 € | 10,0 (7,9–13,4) | 20,7 | 20,5 |
+| 12.10. | 60,5 kWh | 37,8 | 22,7 | 15,05 € | 8,8 (4,3–14,3) | 20,9 | 20,7 |
+| **Summe** | **137,8 kWh** | **93,8** | **44,0** | **36,35 €** | | | |
+
+- Öl-Äquivalent für dieselbe Wärme: ca. 16 l Heizöl, ca. **26,60 €**.
+- 12.10. ist der bisher höchste Tageswert. Er liegt nahe am Maximum von ca. 63 kWh (2,65 kW
+  × 24 h). Abends gleichzeitig laufende Küchengeräte auf L1 werden mitgezählt, der echte Wert
+  ist also etwas niedriger.
+- Hausverbrauch gesamt: 51,2 / 61,3 / 111,8 kWh (12.10. mit E-Auto). PV: 6,7 / 23,5 / 41,9 kWh.
+  Eingespeist praktisch nichts.
+- Umwälzpumpe: 1,3 kWh pro Tag.
+- **Grobe Abschätzung Wärmeverlust:** 12.10. im Mittel 2,5 kW bei ca. 12 K Unterschied
+  innen/außen, also ca. **0,2 kW pro Kelvin**. Hochgerechnet auf −12 °C wären das ca. 7 kW,
+  deutlich weniger als die Richtwerte (22–33 kW). Aber: Nicht alle Räume sind voll beheizt
+  (Keller 16 °C, Thermostate auf 19–21 °C), Sonne und Geräte heizen mit, und das Haus kühlte
+  dabei leicht ab. Der Wert ist eine Untergrenze, keine Heizlastberechnung.
+
+## Probleme und Erkenntnisse
 
 - **WLAN im Heizungsraum zu schwach:** −77 bis −80 dBm. Dazu kam ein
   Bluetooth-Dauerscan der ersten Firmware-Version. Folge: Das ESP verliert
@@ -247,11 +323,12 @@ entgangener Einspeisevergütung 0,08 €/kWh.
 - **Vorlauffühler defekt:** Er meldet konstant 85,0 °C (typischer Fehlerwert
   eines DS18B20 bei fehlender Versorgung) bzw. gar nichts. Verdacht:
   Wackelkontakt an der Versorgungsader.
-- **Sicherheitsverhalten bestätigt:** Nach jedem Neustart steht der Heizstab
-  auf 0 % und heizt nicht von selbst wieder los. Fällt das WLAN aus, läuft er
-  mit der zuletzt gewählten Stufe weiter und ist nur noch am Display bedienbar.
+- **Verhalten nach Neustart:** Bis v1.3.0 stand der Heizstab nach jedem Neustart
+  auf 0 %. Seit v1.4.0 stellt er die zuletzt gewählte Stufe wieder her (gewünscht,
+  am 12.10. bestätigt). Fällt das WLAN aus, läuft er mit der zuletzt gewählten
+  Stufe weiter und ist nur noch am Display bedienbar.
 
-### Offene Punkte
+## Offene Punkte
 
 - [ ] Firmware v1.2.0 per USB aufspielen
 - [ ] WLAN im Heizungsraum verbessern (Ziel: −70 dBm oder besser)
@@ -265,3 +342,6 @@ entgangener Einspeisevergütung 0,08 €/kWh.
       Außentemperatur (sensor.backdoor) und Innentemperatur dazu notieren
 - [ ] Automation „Heizstab nur bei PV-Überschuss“
 - [ ] Eigenen Strompreis und Einspeisevergütung eintragen
+- [ ] Heizstab auf Phase L3 umlegen (L1 entlasten)
+- [ ] Raumfühler für die alten Homematic-Thermostate (Küche, Keller, Kinderzimmer)
+- [ ] Zweite Wärmequelle bzw. Ölheizung für Außentemperaturen unter ca. 5 °C

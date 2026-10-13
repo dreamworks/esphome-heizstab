@@ -290,22 +290,27 @@ entgangener Einspeisevergütung 0,08 €/kWh.
 
 ## Tagesbilanz 10.–12.10.
 
-Netz- und PV-Anteil des Heizstabs hier **anteilig geschätzt**: PV-Anteil am gesamten
-Hausverbrauch des Tages, auf den Heizstab übertragen (das E-Auto am 12.10. macht die bisherige
-Methode unbrauchbar). Preise wie oben.
+Netz- und PV-Anteil des Heizstabs hier **anteilig geschätzt**: Zuerst wird das E-Auto
+herausgerechnet (Ladeleistung auf L2 aus den Stundenmitteln, abzüglich ca. 0,1 kW Grundlast;
+Laden tagsüber zählt als PV, abends als Netz). Der PV-Anteil am übrigen Hausverbrauch wird
+dann auf den Heizstab übertragen. Preise wie oben.
 
-| Tag | Heizstab | davon Netz | davon PV/Akku | Kosten | Außen Ø (min–max) | WZ Ø | OG Ø |
-|---|---|---|---|---|---|---|---|
-| 10.10. | 32,9 kWh | 28,6 | 4,3 | 10,35 € | 12,1 (9,1–13,4) | 21,6 | 21,7 |
-| 11.10. | 44,4 kWh | 27,4 | 17,0 | 10,95 € | 10,0 (7,9–13,4) | 20,7 | 20,5 |
-| 12.10. | 60,5 kWh | 37,8 | 22,7 | 15,05 € | 8,8 (4,3–14,3) | 20,9 | 20,7 |
-| **Summe** | **137,8 kWh** | **93,8** | **44,0** | **36,35 €** | | | |
+| Tag | E-Auto | Heizstab | davon Netz | davon PV/Akku | Kosten | Außen Ø (min–max) | WZ Ø | OG Ø |
+|---|---|---|---|---|---|---|---|---|
+| 10.10. | – | 32,9 kWh | 28,6 | 4,3 | 10,35 € | 12,1 (9,1–13,4) | 21,6 | 21,7 |
+| 11.10. | 2,9 kWh (13 Uhr, PV) | 44,4 kWh | 28,7 | 15,7 | 11,31 € | 10,0 (7,9–13,4) | 20,7 | 20,5 |
+| 12.10. | 33,8 kWh (6,4 PV, 27,4 Netz) | 60,5 kWh | 32,9 | 27,6 | 13,72 € | 8,8 (4,3–14,3) | 20,9 | 20,7 |
+| **Summe** | | **137,8 kWh** | **90,2** | **47,6** | **35,38 €** | | | |
+
+- Das E-Auto lud vom 12.10. 16 Uhr bis 13.10. ca. 6 Uhr durchgehend mit ca. 3,5 kW (L2),
+  zusammen mit dem Laden am Mittag des 12.10. gut 54 kWh. Die Heizstab-Energie selbst ist davon
+  nicht betroffen, weil der Heizstab auf L1 gemessen wird.
 
 - Öl-Äquivalent für dieselbe Wärme: ca. 16 l Heizöl, ca. **26,60 €**.
 - 12.10. ist der bisher höchste Tageswert. Er liegt nahe am Maximum von ca. 63 kWh (2,65 kW
   × 24 h). Abends gleichzeitig laufende Küchengeräte auf L1 werden mitgezählt, der echte Wert
   ist also etwas niedriger.
-- Hausverbrauch gesamt: 51,2 / 61,3 / 111,8 kWh (12.10. mit E-Auto). PV: 6,7 / 23,5 / 41,9 kWh.
+- Hausverbrauch gesamt: 51,2 / 61,3 / 111,8 kWh (11./12.10. mit E-Auto). PV: 6,7 / 23,5 / 41,9 kWh.
   Eingespeist praktisch nichts.
 - Umwälzpumpe: 1,3 kWh pro Tag.
 - **Grobe Abschätzung Wärmeverlust:** 12.10. im Mittel 2,5 kW bei ca. 12 K Unterschied
